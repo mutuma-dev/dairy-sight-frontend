@@ -3,7 +3,7 @@
 /**
  * Device Detail Modal Component
  * Displays full information about a device when clicked from the device list
- * Shows all device properties: ID, available stock, capacity, and status
+ * Shows all device properties except available stock and capacity
  * Can be used for both ATM Devices and Tamper Detection pages
  */
 
@@ -35,27 +35,6 @@ export default function DeviceDetailModal({ device, onClose }: DeviceDetailModal
 
         {/* Modal Content */}
         <div className="p-4 md:p-6 space-y-4 md:space-y-6">
-          {/* Available Stock */}
-          <div className="bg-blue-50 rounded-lg p-3 md:p-4">
-            <p className="text-gray-600 text-xs md:text-sm font-medium mb-1">Available Stock</p>
-            <p className="text-2xl md:text-3xl font-bold text-blue-600">{device.availableStock} L</p>
-          </div>
-
-          {/* Capacity */}
-          <div className="bg-gray-50 rounded-lg p-3 md:p-4">
-            <p className="text-gray-600 text-xs md:text-sm font-medium mb-1">Total Capacity</p>
-            <p className="text-2xl md:text-3xl font-bold text-gray-800">{device.capacity} L</p>
-            <div className="mt-3 bg-gray-200 rounded-full h-2 overflow-hidden">
-              <div
-                className="bg-blue-600 h-full"
-                style={{ width: `${(device.availableStock / device.capacity) * 100}%` }}
-              ></div>
-            </div>
-            <p className="text-xs text-gray-500 mt-2">
-              {Math.round((device.availableStock / device.capacity) * 100)}% filled
-            </p>
-          </div>
-
           {/* Device Status */}
           <div className="bg-gray-50 rounded-lg p-3 md:p-4">
             <p className="text-gray-600 text-xs md:text-sm font-medium mb-2">Device Status</p>
@@ -99,3 +78,4 @@ export default function DeviceDetailModal({ device, onClose }: DeviceDetailModal
     </div>
   )
 }
+
