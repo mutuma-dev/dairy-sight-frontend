@@ -2,6 +2,7 @@
  * Main App Page
  * Root route that renders the layout with navigation and main content
  * Handles routing between different sections (Dashboard, ATM Devices, etc.)
+ * Now includes a console.error override to show errors as alerts for debugging
  */
 
 "use client"
@@ -21,6 +22,24 @@ export default function Home() {
   const [appData, setAppData] = useState<AppData | null>(null)
   const [loading, setLoading] = useState(true)
   const [sidebarOpen, setSidebarOpen] = useState(false)
+
+  // 🔴 Override console.error to also show alerts
+  useEffect(() => {
+    const originalConsoleError = console.error
+    console.error = (...args: any[]) => {
+      originalConsoleError(...args) // still log in console
+      alert(
+        args
+          .map((arg) =>
+            typeof arg === "object" ? JSON.stringify(arg, null, 2) : arg
+          )
+          .join("\n")
+      )
+    }
+    return () => {
+      console.error = originalConsoleError // restore original on unmount
+    }
+  }, [])
 
   // Load app data from JSON file on mount
   useEffect(() => {
@@ -67,6 +86,7 @@ export default function Home() {
     console.log("[v0] Withdrawal processed:", amount)
   }
 
+  // Show loading screen while data is fetching
   if (loading || !appData) {
     return (
       <div className="flex h-screen items-center justify-center bg-gray-100">
@@ -95,15 +115,28 @@ export default function Home() {
       <main className="flex-1 overflow-auto relative">
         <div className="pt-16 lg:pt-0">
           {currentPage === "dashboard" && <Dashboard appData={appData} />}
-          {currentPage === "atm-devices" && <AtmDevices devices={appData.devices} />}
-          {currentPage === "tamper-detection" && <TamperDetection devices={appData.devices} />}
-          {currentPage === "sales-analytics" && <SalesAnalytics analytics={appData.analytics} />}
-          {currentPage === "price" && <Price pricing={appData.pricing} onUpdatePrice={handleUpdatePrice} />}
+          {currentPage === "atm-devices" && (
+            <AtmDevices devices={appData.devices} />
+          )}
+          {currentPage === "tamper-detection" && (
+            <TamperDetection devices={appData.devices} />
+          )}
+          {currentPage === "sales-analytics" && (
+            <SalesAnalytics analytics={appData.analytics} />
+          )}
+          {currentPage === "price" && (
+            <Price pricing={appData.pricing} onUpdatePrice={handleUpdatePrice} />
+          )}
           {currentPage === "account" && (
-            <AccountPage account={appData.account} vendor={appData.vendor} onWithdraw={handleWithdraw} />
+            <AccountPage
+              account={appData.account}
+              vendor={appData.vendor}
+              onWithdraw={handleWithdraw}
+            />
           )}
         </div>
       </main>
     </div>
   )
 }
+
