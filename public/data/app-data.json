@@ -4,12 +4,33 @@
     "shopName": "Johns Milk Shop",
     "id": "VENDOR_001"
   },
+  "pricing": {
+    "pricePerLitre": 150
+  },
+  "account": {
+    "balance": 125400,
+    "withdrawals": [
+      {
+        "id": "WD_001",
+        "amount": 50000,
+        "timestamp": "2025-12-08T10:30:00Z"
+      },
+      {
+        "id": "WD_002",
+        "amount": 75000,
+        "timestamp": "2025-12-07T14:15:00Z"
+      },
+      {
+        "id": "WD_003",
+        "amount": 30000,
+        "timestamp": "2025-12-06T09:45:00Z"
+      }
+    ]
+  },
   "devices": [
     {
       "id": "ATM-001",
       "name": "ATM Device 1",
-      "availableStock": 100,
-      "capacity": 120,
       "status": "online",
       "isTampered": false,
       "lastUpdated": "2025-12-09T15:30:00Z"
@@ -17,8 +38,6 @@
     {
       "id": "ATM-002",
       "name": "ATM Device 2",
-      "availableStock": 90,
-      "capacity": 120,
       "status": "online",
       "isTampered": false,
       "lastUpdated": "2025-12-09T15:25:00Z"
@@ -26,8 +45,6 @@
     {
       "id": "ATM-003",
       "name": "ATM Device 3",
-      "availableStock": 80,
-      "capacity": 120,
       "status": "offline",
       "isTampered": false,
       "lastUpdated": "2025-12-09T15:00:00Z"
@@ -35,8 +52,6 @@
     {
       "id": "ATM-004",
       "name": "ATM Device 4",
-      "availableStock": 45,
-      "capacity": 120,
       "status": "online",
       "isTampered": true,
       "lastUpdated": "2025-12-09T14:50:00Z"
@@ -44,8 +59,6 @@
     {
       "id": "ATM-005",
       "name": "ATM Device 5",
-      "availableStock": 20,
-      "capacity": 120,
       "status": "offline",
       "isTampered": true,
       "lastUpdated": "2025-12-09T14:30:00Z"
@@ -56,40 +69,37 @@
       "id": "TXN_1001",
       "deviceId": "ATM-001",
       "deviceName": "MPESA - Device ATM-1",
-      "amount": 500,
+      "litres": 10,
+      "amount": 1500,
       "currency": "KES",
       "timestamp": "2025-12-09T14:30:00Z",
       "type": "mpesa",
       "mpesaNumber": "+254712345678",
-      "mpesaCode": "JZK4NE3NC",
-      "bankAccount": null,
-      "bankName": null
+      "mpesaCode": "JZK4NE3NC"
     },
     {
       "id": "TXN_1002",
       "deviceId": "ATM-002",
-      "deviceName": "Bank Transfer - Device ATM-2",
+      "deviceName": "MPESA - Device ATM-2",
+      "litres": 8,
       "amount": 1200,
       "currency": "KES",
       "timestamp": "2025-12-09T13:45:00Z",
-      "type": "bank",
-      "mpesaNumber": null,
-      "mpesaCode": null,
-      "bankAccount": "1234567890",
-      "bankName": "Kenya Commercial Bank"
+      "type": "mpesa",
+      "mpesaNumber": "+254798765432",
+      "mpesaCode": "XYZ9ABC1L"
     },
     {
       "id": "TXN_1003",
       "deviceId": "ATM-003",
       "deviceName": "MPESA - Device ATM-3",
-      "amount": 800,
+      "litres": 5,
+      "amount": 750,
       "currency": "KES",
       "timestamp": "2025-12-09T12:15:00Z",
       "type": "mpesa",
-      "mpesaNumber": "+254798765432",
-      "mpesaCode": "ABC1XYZ9L",
-      "bankAccount": null,
-      "bankName": null
+      "mpesaNumber": "+254723456789",
+      "mpesaCode": "DEF2GHI8M"
     }
   ],
   "alerts": [
@@ -97,27 +107,35 @@
       "id": "ALERT_001",
       "deviceId": "ATM-003",
       "deviceName": "ATM-3",
-      "availableStock": 80,
-      "capacity": 120,
       "status": "offline",
       "type": "offline",
       "severity": "critical",
       "timestamp": "2025-12-09T15:00:00Z",
       "resolved": false
+    },
+    {
+      "id": "ALERT_002",
+      "deviceId": "ATM-005",
+      "deviceName": "ATM-5",
+      "status": "offline",
+      "type": "offline",
+      "severity": "critical",
+      "timestamp": "2025-12-09T14:30:00Z",
+      "resolved": false
     }
   ],
   "analytics": {
-    "totalSales": {
-      "last24Hours": 125400,
-      "last7Days": 580000,
-      "last30Days": 2500000,
-      "last1Year": 15800000
+    "totalLitres": {
+      "last24Hours": 836,
+      "last7Days": 3867,
+      "last30Days": 16667,
+      "last1Year": 105333
     },
     "peakHours": {
-      "last24Hours": { "hour": "6 PM - 8 PM", "units": 2400 },
-      "last7Days": { "hour": "6 PM - 8 PM", "units": 15000 },
-      "last30Days": { "hour": "6 PM - 8 PM", "units": 55000 },
-      "last1Year": { "hour": "6 PM - 8 PM", "units": 250000 }
+      "last24Hours": { "hour": "6 PM - 8 PM", "litres": 160 },
+      "last7Days": { "hour": "6 PM - 8 PM", "litres": 1000 },
+      "last30Days": { "hour": "6 PM - 8 PM", "litres": 3667 },
+      "last1Year": { "hour": "6 PM - 8 PM", "litres": 16667 }
     }
   }
 }

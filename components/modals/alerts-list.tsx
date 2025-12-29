@@ -60,23 +60,11 @@ export default function AlertsList({ alerts, onClose }: AlertsListProps) {
                   </div>
 
                   {/* Alert Details Grid */}
-                  <div className="grid grid-cols-2 md:grid-cols-4 gap-2 md:gap-3 text-xs md:text-sm bg-white rounded-lg p-3 mb-3">
+                  <div className="grid grid-cols-2 md:grid-cols-2 gap-2 md:gap-3 text-xs md:text-sm bg-white rounded-lg p-3 mb-3">
                     {/* Device ID */}
                     <div>
                       <p className="text-gray-600 font-medium">Device ID</p>
                       <p className="text-gray-800 font-semibold text-xs md:text-sm">{alert.deviceId}</p>
-                    </div>
-
-                    {/* Available Stock */}
-                    <div>
-                      <p className="text-gray-600 font-medium">Stock</p>
-                      <p className="text-gray-800 font-semibold text-xs md:text-sm">{alert.availableStock}L</p>
-                    </div>
-
-                    {/* Capacity */}
-                    <div>
-                      <p className="text-gray-600 font-medium">Capacity</p>
-                      <p className="text-gray-800 font-semibold text-xs md:text-sm">{alert.capacity}L</p>
                     </div>
 
                     {/* Status */}

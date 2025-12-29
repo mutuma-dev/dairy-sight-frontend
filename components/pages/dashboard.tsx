@@ -30,16 +30,22 @@ export default function Dashboard({ appData }: DashboardProps) {
   return (
     <div className="min-h-screen p-3 md:p-6 space-y-4 md:space-y-6 lg:pt-6">
       {/* Header - Added top padding for mobile menu */}
-      <div className="flex items-center justify-between mt-12 lg:mt-0">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between mt-12 lg:mt-0 gap-2">
         <h1 className="text-xl md:text-2xl lg:text-3xl font-bold text-gray-800">Dashboard</h1>
+        {/* Vendor name and ID display */}
+        <div className="text-sm text-gray-600 bg-white px-3 py-1.5 rounded-lg shadow-sm border border-gray-100 self-start">
+          <span className="font-semibold">Vendor:</span> {appData.vendor.name}
+          <span className="mx-2 text-gray-300">|</span>
+          <span className="font-semibold">ID:</span> {appData.vendor.id}
+        </div>
       </div>
 
-      {/* Stats Cards Grid - Improved responsive design */}
+      {/* Stats Cards Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2 md:gap-4">
         {/* Total Sales Card */}
         <StatsCard
           title="Total Sales (This Week)"
-          value={`KES ${appData.analytics.totalSales.last7Days.toLocaleString()}`}
+          value={`KES ${(appData.analytics.totalLitres.last7Days * appData.pricing.pricePerLitre).toLocaleString()}`}
           change="+12.5%"
           backgroundColor="bg-white"
         />
@@ -58,7 +64,7 @@ export default function Dashboard({ appData }: DashboardProps) {
         <StatsCard
           title="Peak Hour"
           value={appData.analytics.peakHours.last7Days.hour}
-          change={`${appData.analytics.peakHours.last7Days.units.toLocaleString()} units sold`}
+          change={`${appData.analytics.peakHours.last7Days.litres.toLocaleString()} litres sold`}
           backgroundColor="bg-white"
         />
 
@@ -143,7 +149,6 @@ export default function Dashboard({ appData }: DashboardProps) {
             >
               <div className="flex-1">
                 <p className="font-medium text-sm md:text-base text-gray-800">{device.id}</p>
-                <p className="text-xs md:text-sm text-gray-500">Stock: {device.availableStock}L</p>
               </div>
               <div className="flex items-center gap-2 flex-shrink-0">
                 <span

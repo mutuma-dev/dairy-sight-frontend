@@ -23,14 +23,14 @@ export default function TamperDetection({ devices }: TamperDetectionProps) {
   return (
     <div className="min-h-screen p-3 md:p-6 space-y-4 md:space-y-6 lg:pt-6">
       {/* Header */}
-      <div className="mt-12 lg:mt-0">
+      <div className="mt-14 lg:mt-0">
         <h1 className="text-xl md:text-2xl lg:text-3xl font-bold text-gray-800">Tamper Detection</h1>
         <p className="text-gray-600 mt-1 md:mt-2 text-sm md:text-base">Monitor devices flagged for tampering</p>
       </div>
 
       {/* Tampered Devices Count */}
       {tamperedDevices.length > 0 && (
-        <div className="bg-red-50 border-l-4 border-red-500 p-3 md:p-4 rounded text-sm md:text-base">
+        <div className="bg-red-50 border-l-4 border-red-500 p-3 md:p-4 rounded text-sm md:text-base shadow-sm">
           <p className="text-red-700 font-semibold">{tamperedDevices.length} device(s) flagged for tampering</p>
         </div>
       )}
@@ -51,14 +51,8 @@ export default function TamperDetection({ devices }: TamperDetectionProps) {
 
               {/* Card Content */}
               <div className="p-4 md:p-6 space-y-3 md:space-y-4">
-                {/* Available Stock */}
-                <div className="flex justify-between items-center">
-                  <span className="text-gray-600 font-medium text-sm md:text-base">Available Stock</span>
-                  <span className="text-xl md:text-2xl font-bold text-red-600">{device.availableStock}L</span>
-                </div>
-
                 {/* Device Status */}
-                <div className="flex items-center justify-between pt-3 md:pt-4 border-t border-gray-200">
+                <div className="flex items-center justify-between">
                   <span className="text-gray-600 font-medium text-sm md:text-base">Device Status</span>
                   <div className="flex items-center gap-2">
                     <span

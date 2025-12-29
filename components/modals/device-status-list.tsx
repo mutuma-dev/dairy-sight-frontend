@@ -74,31 +74,24 @@ export default function DeviceStatusList({ devices, onClose }: DeviceStatusListP
                 </div>
 
                 {/* Device Details Grid */}
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-2 md:gap-3 text-xs md:text-sm bg-white rounded-lg p-3">
+                <div className="grid grid-cols-2 md:grid-cols-2 gap-2 md:gap-3 text-xs md:text-sm bg-white rounded-lg p-3">
                   {/* Device ID */}
                   <div>
                     <p className="text-gray-600 font-medium">Device ID</p>
                     <p className="text-gray-800 font-semibold text-xs md:text-sm">{device.id}</p>
                   </div>
 
-                  {/* Available Stock */}
+                  {/* Device Status */}
                   <div>
-                    <p className="text-gray-600 font-medium">Stock</p>
-                    <p className="text-gray-800 font-semibold text-xs md:text-sm">{device.availableStock}L</p>
-                  </div>
-
-                  {/* Capacity */}
-                  <div>
-                    <p className="text-gray-600 font-medium">Capacity</p>
-                    <p className="text-gray-800 font-semibold text-xs md:text-sm">{device.capacity}L</p>
-                  </div>
-
-                  {/* Utilization */}
-                  <div>
-                    <p className="text-gray-600 font-medium">Utilization</p>
-                    <p className="text-gray-800 font-semibold text-xs md:text-sm">
-                      {Math.round((device.availableStock / device.capacity) * 100)}%
-                    </p>
+                    <p className="text-gray-600 font-medium">Current Status</p>
+                    <div className="flex items-center gap-1">
+                      <span
+                        className={`inline-block w-2 h-2 rounded-full ${
+                          device.status === "online" ? "bg-green-500" : "bg-red-500"
+                        }`}
+                      ></span>
+                      <p className="text-gray-800 font-semibold capitalize">{device.status}</p>
+                    </div>
                   </div>
                 </div>
 

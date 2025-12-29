@@ -9,60 +9,77 @@ export interface Vendor {
   id: string
 }
 
+// <CHANGE> Removed availableStock and capacity fields from Device
 export interface Device {
   id: string
   name: string
-  availableStock: number
-  capacity: number
   status: "online" | "offline"
   isTampered: boolean
   lastUpdated: string
 }
 
+// <CHANGE> Removed bank fields, added litres field for sales calculation
 export interface Transaction {
   id: string
   deviceId: string
   deviceName: string
+  litres: number
   amount: number
   currency: string
   timestamp: string
-  type: "mpesa" | "bank"
-  mpesaNumber: string | null
-  mpesaCode: string | null
-  bankAccount: string | null
-  bankName: string | null
+  type: "mpesa"
+  mpesaNumber: string
+  mpesaCode: string
 }
 
+// <CHANGE> Removed availableStock and capacity fields from Alert
 export interface Alert {
   id: string
   deviceId: string
   deviceName: string
-  availableStock: number
-  capacity: number
   status: "online" | "offline"
-  type: "offline" | "tampered" | "low_stock"
+  type: "offline" | "tampered"
   severity: "critical" | "warning"
   timestamp: string
   resolved: boolean
 }
 
+// <CHANGE> Changed units to litres throughout analytics
 export interface Analytics {
-  totalSales: {
+  totalLitres: {
     last24Hours: number
     last7Days: number
     last30Days: number
     last1Year: number
   }
   peakHours: {
-    last24Hours: { hour: string; units: number }
-    last7Days: { hour: string; units: number }
-    last30Days: { hour: string; units: number }
-    last1Year: { hour: string; units: number }
+    last24Hours: { hour: string; litres: number }
+    last7Days: { hour: string; litres: number }
+    last30Days: { hour: string; litres: number }
+    last1Year: { hour: string; litres: number }
   }
+}
+
+// <CHANGE> Added new interfaces for pricing and account management
+export interface Pricing {
+  pricePerLitre: number
+}
+
+export interface Withdrawal {
+  id: string
+  amount: number
+  timestamp: string
+}
+
+export interface Account {
+  balance: number
+  withdrawals: Withdrawal[]
 }
 
 export interface AppData {
   vendor: Vendor
+  pricing: Pricing
+  account: Account
   devices: Device[]
   transactions: Transaction[]
   alerts: Alert[]

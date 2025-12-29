@@ -21,7 +21,7 @@ export default function DeviceCard({ device, onClick, variant = "default" }: Dev
   return (
     <div
       onClick={onClick}
-      className={`rounded-lg shadow-md hover:shadow-lg transition-shadow cursor-pointer overflow-hidden ${
+      className={`rounded-lg shadow-md hover:shadow-lg transition-shadow cursor-pointer overflow-hidden bg-white ${
         isTampered ? "border-2 border-red-200" : ""
       }`}
     >
@@ -36,17 +36,9 @@ export default function DeviceCard({ device, onClick, variant = "default" }: Dev
       </div>
 
       {/* Card Content */}
-      <div className="bg-white p-6 space-y-4">
-        {/* Available Stock */}
-        <div className="flex justify-between items-center">
-          <span className="text-gray-600 font-medium">Available Stock</span>
-          <span className={`text-2xl font-bold ${isTampered ? "text-red-600" : "text-blue-600"}`}>
-            {device.availableStock}L
-          </span>
-        </div>
-
+      <div className="p-6 space-y-4">
         {/* Device Status */}
-        <div className="flex items-center justify-between pt-4 border-t border-gray-200">
+        <div className="flex items-center justify-between">
           <span className="text-gray-600 font-medium">Device Status</span>
           <div className="flex items-center gap-2">
             <span

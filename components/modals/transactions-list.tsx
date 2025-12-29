@@ -41,8 +41,8 @@ export default function TransactionsList({ transactions, onClose }: Transactions
             <div className="hidden md:grid grid-cols-5 gap-4 mb-3 pb-3 border-b-2 border-gray-200">
               <div className="font-semibold text-gray-700 text-sm">Transaction ID</div>
               <div className="font-semibold text-gray-700 text-sm">Device</div>
+              <div className="font-semibold text-gray-700 text-sm">Litres</div>
               <div className="font-semibold text-gray-700 text-sm">Amount</div>
-              <div className="font-semibold text-gray-700 text-sm">Type</div>
               <div className="font-semibold text-gray-700 text-sm">Date & Time</div>
             </div>
 
@@ -61,30 +61,23 @@ export default function TransactionsList({ transactions, onClose }: Transactions
                     </div>
 
                     <div className="grid grid-cols-2 gap-3 text-xs">
+                      {/* <CHANGE> Changed "units" to "litres" */}
+                      <div>
+                        <span className="text-gray-600 font-medium block">Litres</span>
+                        <span className="text-gray-800 font-semibold">{txn.litres}L</span>
+                      </div>
                       <div>
                         <span className="text-gray-600 font-medium block">Payment Type</span>
-                        <span className="text-gray-800 font-semibold">{txn.type === "mpesa" ? "M-PESA" : "Bank"}</span>
+                        <span className="text-gray-800 font-semibold">M-PESA</span>
                       </div>
                       <div>
-                        <span className="text-gray-600 font-medium block">
-                          {txn.type === "mpesa" ? "Phone" : "Account"}
-                        </span>
-                        <span className="text-gray-800 font-semibold break-all">
-                          {txn.type === "mpesa" ? txn.mpesaNumber : txn.bankAccount}
-                        </span>
+                        <span className="text-gray-600 font-medium block">Phone</span>
+                        <span className="text-gray-800 font-semibold break-all">{txn.mpesaNumber}</span>
                       </div>
-                      {txn.type === "mpesa" && txn.mpesaCode && (
-                        <div>
-                          <span className="text-gray-600 font-medium block">M-PESA Code</span>
-                          <span className="text-gray-800 font-semibold">{txn.mpesaCode}</span>
-                        </div>
-                      )}
-                      {txn.type === "bank" && txn.bankName && (
-                        <div>
-                          <span className="text-gray-600 font-medium block">Bank</span>
-                          <span className="text-gray-800 font-semibold">{txn.bankName}</span>
-                        </div>
-                      )}
+                      <div>
+                        <span className="text-gray-600 font-medium block">M-PESA Code</span>
+                        <span className="text-gray-800 font-semibold">{txn.mpesaCode}</span>
+                      </div>
                     </div>
 
                     <div className="pt-2 border-t">
@@ -110,16 +103,14 @@ export default function TransactionsList({ transactions, onClose }: Transactions
                       <p className="text-xs text-gray-500">{txn.deviceName}</p>
                     </div>
 
-                    <div className="text-sm text-gray-700">
-                      {txn.type === "mpesa" ? txn.mpesaNumber : txn.bankAccount}
-                    </div>
+                    {/* <CHANGE> Changed "units" to "litres" */}
+                    <div className="text-sm text-gray-700">{txn.litres}L</div>
 
                     <div className="font-bold text-blue-600 text-sm">KES {txn.amount.toLocaleString()}</div>
 
-                    <div className="text-sm">
-                      <span className="inline-block px-2 py-1 rounded bg-blue-100 text-blue-800 font-medium">
-                        {txn.type === "mpesa" ? "M-PESA" : "Bank"}
-                      </span>
+                    <div className="text-xs">
+                      <p className="text-gray-700 font-medium">{txn.mpesaNumber}</p>
+                      <p className="text-gray-500">{txn.mpesaCode}</p>
                     </div>
 
                     <div className="text-xs text-gray-600">
