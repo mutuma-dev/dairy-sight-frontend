@@ -3,5 +3,5 @@ This is a dairy sight project frontend meant to manage milk vendor machines with
 
 ## Overview
 
-This website url is 
+This website url is https://dairy-sight-frontend.vercel.app
 
