@@ -2,7 +2,7 @@
  * ATM Devices Page Component
  * Displays a grid of ATM device cards with summary information
  * Clicking a card opens detailed view with full information
- * Data is read from app data file
+ * Allows adding new devices via a modal form
  */
 
 "use client"
@@ -16,21 +16,62 @@ interface AtmDevicesProps {
 }
 
 export default function AtmDevices({ devices }: AtmDevicesProps) {
+  const [deviceList, setDeviceList] = useState<Device[]>(devices)
   const [selectedDevice, setSelectedDevice] = useState<Device | null>(null)
+  const [showAddModal, setShowAddModal] = useState(false)
+  const [newDevice, setNewDevice] = useState({ id: "", name: "", status: "online" })
+
+  // Handle input changes
+  const handleChange = (field: string, value: string) => {
+    setNewDevice({ ...newDevice, [field]: value })
+  }
+
+  // Handle checkbox toggle
+  const handleStatusToggle = () => {
+    setNewDevice({ ...newDevice, status: newDevice.status === "online" ? "offline" : "online" })
+  }
+
+  // Add new device
+  const handleAddDevice = () => {
+    if (!newDevice.id.trim() || !newDevice.name.trim()) {
+      alert("Please fill in all fields.")
+      return
+    }
+
+    const exists = deviceList.find((d) => d.id === newDevice.id.trim())
+    if (exists) {
+      alert("A device with this ID already exists.")
+      return
+    }
+
+    setDeviceList([...deviceList, { ...newDevice }])
+    setNewDevice({ id: "", name: "", status: "online" })
+    setShowAddModal(false)
+  }
 
   return (
     <div className="min-h-screen p-3 md:p-6 space-y-4 md:space-y-6 lg:pt-6">
       {/* Header */}
-      <div className="mt-14 lg:mt-0">
-        <h1 className="text-xl md:text-2xl lg:text-3xl font-bold text-gray-800">ATM Devices</h1>
-        <p className="text-gray-600 mt-1 md:mt-2 text-sm md:text-base">
-          Manage and monitor all milk vending ATM devices
-        </p>
+      <div className="flex justify-between items-start mt-14 lg:mt-0">
+        <div>
+          <h1 className="text-xl md:text-2xl lg:text-3xl font-bold text-gray-800">ATM Devices</h1>
+          <p className="text-gray-600 mt-1 md:mt-2 text-sm md:text-base">
+            Manage and monitor all milk vending ATM devices
+          </p>
+        </div>
+
+        {/* Add Device Button */}
+        <button
+          onClick={() => setShowAddModal(true)}
+          className="bg-blue-600 text-white rounded-lg px-4 py-2 text-sm md:text-base hover:bg-blue-700 transition"
+        >
+          + Add Device
+        </button>
       </div>
 
-      {/* Devices Grid - Responsive grid for mobile and desktop */}
+      {/* Devices Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-6">
-        {devices.map((device) => (
+        {deviceList.map((device) => (
           <div
             key={device.id}
             onClick={() => setSelectedDevice(device)}
@@ -67,6 +108,68 @@ export default function AtmDevices({ devices }: AtmDevicesProps) {
 
       {/* Device Detail Modal */}
       {selectedDevice && <DeviceDetailModal device={selectedDevice} onClose={() => setSelectedDevice(null)} />}
+
+      {/* Add Device Modal */}
+      {showAddModal && (
+        <div className="fixed inset-0 bg-black/30 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-xl shadow-2xl w-full max-w-md p-6 space-y-4">
+            <h2 className="text-lg md:text-xl font-bold text-gray-800">Add New Device</h2>
+
+            {/* Device ID */}
+            <div className="flex flex-col">
+              <label className="text-gray-700 text-sm mb-1">Device ID</label>
+              <input
+                type="text"
+                value={newDevice.id}
+                onChange={(e) => handleChange("id", e.target.value)}
+                className="border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+            </div>
+
+            {/* Device Name */}
+            <div className="flex flex-col">
+              <label className="text-gray-700 text-sm mb-1">Device Name</label>
+              <input
+                type="text"
+                value={newDevice.name}
+                onChange={(e) => handleChange("name", e.target.value)}
+                className="border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+            </div>
+
+            {/* Status Checkbox */}
+            <div className="flex items-center gap-3">
+              <label className="text-gray-700 text-sm">Status:</label>
+              <div className="flex items-center gap-2">
+                <input
+                  type="checkbox"
+                  checked={newDevice.status === "online"}
+                  onChange={handleStatusToggle}
+                  className="w-4 h-4 accent-blue-600"
+                />
+                <span className="text-gray-700 text-sm">Online</span>
+              </div>
+            </div>
+
+            {/* Modal Buttons */}
+            <div className="flex justify-end gap-3 mt-4">
+              <button
+                onClick={() => setShowAddModal(false)}
+                className="bg-gray-200 text-gray-800 px-4 py-2 rounded-md hover:bg-gray-300 transition text-sm"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleAddDevice}
+                className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition text-sm"
+              >
+                Save
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   )
 }
+
