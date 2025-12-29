@@ -1,14 +1,14 @@
 {
   "vendor": {
-    "name": "John",
-    "shopName": "Johns Milk Shop",
+    "name": "Mugambi",
+    "shopName": "Mugambi's Milk Shop",
     "id": "VENDOR_001"
   },
   "pricing": {
-    "pricePerLitre": 150
+    "pricePerLitre": 60
   },
   "account": {
-    "balance": 125400,
+    "balance": 60400,
     "withdrawals": [
       {
         "id": "WD_001",
