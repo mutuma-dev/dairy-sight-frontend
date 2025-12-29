@@ -3,6 +3,7 @@
  * Displays a grid of ATM device cards with summary information
  * Clicking a card opens detailed view with full information
  * Allows adding new devices via a modal form
+ * Automatically adds a timestamp to each new device
  */
 
 "use client"
@@ -16,37 +17,58 @@ interface AtmDevicesProps {
 }
 
 export default function AtmDevices({ devices }: AtmDevicesProps) {
+  // State for the device list
   const [deviceList, setDeviceList] = useState<Device[]>(devices)
+  // State for the selected device for detail modal
   const [selectedDevice, setSelectedDevice] = useState<Device | null>(null)
+  // State to control add device modal visibility
   const [showAddModal, setShowAddModal] = useState(false)
+  // State for new device input fields
   const [newDevice, setNewDevice] = useState({ id: "", name: "", status: "online" })
 
-  // Handle input changes
+  /**
+   * Handle input field changes
+   * @param field - "id" or "name"
+   * @param value - string value entered
+   */
   const handleChange = (field: string, value: string) => {
     setNewDevice({ ...newDevice, [field]: value })
   }
 
-  // Handle checkbox toggle
+  /**
+   * Toggle the status between "online" and "offline"
+   */
   const handleStatusToggle = () => {
     setNewDevice({ ...newDevice, status: newDevice.status === "online" ? "offline" : "online" })
   }
 
-  // Add new device
+  /**
+   * Add a new device to the list with validation
+   * Automatically adds a lastUpdated timestamp
+   */
   const handleAddDevice = () => {
+    // Validate fields
     if (!newDevice.id.trim() || !newDevice.name.trim()) {
       alert("Please fill in all fields.")
       return
     }
 
+    // Prevent duplicate IDs
     const exists = deviceList.find((d) => d.id === newDevice.id.trim())
     if (exists) {
       alert("A device with this ID already exists.")
       return
     }
 
-    setDeviceList([...deviceList, { ...newDevice }])
-    setNewDevice({ id: "", name: "", status: "online" })
-    setShowAddModal(false)
+    // Add timestamp automatically
+    const timestampedDevice: Device = {
+      ...newDevice,
+      lastUpdated: new Date().toISOString() // consistent with data file
+    }
+
+    setDeviceList([...deviceList, timestampedDevice])
+    setNewDevice({ id: "", name: "", status: "online" }) // reset form
+    setShowAddModal(false) // close modal
   }
 
   return (
@@ -69,7 +91,7 @@ export default function AtmDevices({ devices }: AtmDevicesProps) {
         </button>
       </div>
 
-      {/* Devices Grid */}
+      {/* Devices Grid - Responsive grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-6">
         {deviceList.map((device) => (
           <div
