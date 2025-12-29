@@ -44,7 +44,8 @@ export default function TransactionsList({ transactions, onClose }: Transactions
               {/* Transaction Info in Linear Layout */}
               <div className="space-y-1">
                 <p className="text-gray-800 font-semibold">Transaction ID: <span className="font-normal">{txn.id}</span></p>
-                <p className="text-gray-800 font-semibold">Device: <span className="font-normal">{txn.deviceName}</span></p>
+                <p className="text-gray-800 font-semibold">Device Name: <span className="font-normal">{txn.deviceName}</span></p>
+                <p className="text-gray-800 font-semibold">Device ID: <span className="font-normal">{txn.deviceID}</span></p>
                 <p className="text-gray-800 font-semibold">Amount: <span className="font-normal text-blue-600">KES {txn.amount.toLocaleString()}</span></p>
                 <p className="text-gray-800 font-semibold">Payment Type: <span className="font-normal">M-PESA</span></p>
                 <p className="text-gray-800 font-semibold">Phone: <span className="font-normal break-all">{txn.mpesaNumber}</span></p>
