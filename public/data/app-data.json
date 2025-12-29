@@ -30,35 +30,35 @@
   "devices": [
     {
       "id": "ATM-001",
-      "name": "ATM Device 1",
+      "name": "NYERI DEVICE 1",
       "status": "online",
       "isTampered": false,
       "lastUpdated": "2025-12-09T15:30:00Z"
     },
     {
       "id": "ATM-002",
-      "name": "ATM Device 2",
+      "name": "NYERI DEVICE 2",
       "status": "online",
       "isTampered": false,
       "lastUpdated": "2025-12-09T15:25:00Z"
     },
     {
       "id": "ATM-003",
-      "name": "ATM Device 3",
+      "name": "MERU DEVICE 1",
       "status": "offline",
       "isTampered": false,
       "lastUpdated": "2025-12-09T15:00:00Z"
     },
     {
       "id": "ATM-004",
-      "name": "ATM Device 4",
+      "name": "MERU DEVICE 2",
       "status": "online",
       "isTampered": true,
       "lastUpdated": "2025-12-09T14:50:00Z"
     },
     {
       "id": "ATM-005",
-      "name": "ATM Device 5",
+      "name": "NGONG DEVICE 1",
       "status": "offline",
       "isTampered": true,
       "lastUpdated": "2025-12-09T14:30:00Z"
@@ -68,7 +68,7 @@
     {
       "id": "TXN_1001",
       "deviceId": "ATM-001",
-      "deviceName": "MPESA - Device ATM-1",
+      "deviceName": "NYERI DEVICE 1",
       "amount": 1500,
       "currency": "KES",
       "timestamp": "2025-12-09T14:30:00Z",
@@ -79,7 +79,7 @@
     {
       "id": "TXN_1002",
       "deviceId": "ATM-002",
-      "deviceName": "MPESA - Device ATM-2",
+      "deviceName": "NYERI DEVICE 2",
       "amount": 1200,
       "currency": "KES",
       "timestamp": "2025-12-09T13:45:00Z",
@@ -89,8 +89,8 @@
     },
     {
       "id": "TXN_1003",
-      "deviceId": "ATM-003",
-      "deviceName": "MPESA - Device ATM-3",
+      "deviceId": "ATM-004",
+      "deviceName": "MERU DEVICE 2",
       "amount": 750,
       "currency": "KES",
       "timestamp": "2025-12-09T12:15:00Z",
@@ -103,7 +103,7 @@
     {
       "id": "ALERT_001",
       "deviceId": "ATM-003",
-      "deviceName": "ATM-3",
+      "deviceName": "MERU DEVICE 1",
       "status": "offline",
       "type": "offline",
       "severity": "critical",
@@ -113,7 +113,7 @@
     {
       "id": "ALERT_002",
       "deviceId": "ATM-005",
-      "deviceName": "ATM-5",
+      "deviceName": "NGONG DEVICE 1",
       "status": "offline",
       "type": "offline",
       "severity": "critical",
