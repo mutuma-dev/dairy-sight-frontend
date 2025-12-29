@@ -69,7 +69,7 @@
       "id": "TXN_1001",
       "deviceId": "ATM-001",
       "deviceName": "NYERI DEVICE 1",
-      "amount": 1500,
+      "amount": 120,
       "currency": "KES",
       "timestamp": "2025-12-09T14:30:00Z",
       "type": "mpesa",
@@ -80,7 +80,7 @@
       "id": "TXN_1002",
       "deviceId": "ATM-002",
       "deviceName": "NYERI DEVICE 2",
-      "amount": 1200,
+      "amount": 60,
       "currency": "KES",
       "timestamp": "2025-12-09T13:45:00Z",
       "type": "mpesa",
@@ -91,7 +91,7 @@
       "id": "TXN_1003",
       "deviceId": "ATM-004",
       "deviceName": "MERU DEVICE 2",
-      "amount": 750,
+      "amount": 60,
       "currency": "KES",
       "timestamp": "2025-12-09T12:15:00Z",
       "type": "mpesa",
@@ -129,10 +129,10 @@
       "last1Year": 105333
     },
     "peakHours": {
-      "last24Hours": { "hour": "6 PM - 8 PM", "litres": 160 },
-      "last7Days": { "hour": "6 PM - 8 PM", "litres": 1000 },
-      "last30Days": { "hour": "6 PM - 8 PM", "litres": 3667 },
-      "last1Year": { "hour": "6 PM - 8 PM", "litres": 16667 }
+      "last24Hours": { "hour": "7 PM - 8 PM", "litres": 160 },
+      "last7Days": { "hour": "6 PM - 7 PM", "litres": 1000 },
+      "last30Days": { "hour": "6 PM - 7 PM", "litres": 3667 },
+      "last1Year": { "hour": "10 PM - 11 PM", "litres": 16667 }
     }
   }
 }
