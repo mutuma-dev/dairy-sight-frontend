@@ -2,10 +2,10 @@
 
 /**
  * Transactions List Modal Component
- * Displays all transactions in a clean, professional format
- * Shows transaction ID, device, amount, payment type and details
- * Timestamps displayed in Kenya timezone format
- * Fully responsive for mobile and desktop screens
+ * Displays all transactions in a linear, readable card layout
+ * Shows transaction ID, device, amount, payment type, phone, M-PESA code, and timestamp
+ * No litres field included
+ * Fully responsive and visually clean
  */
 
 import type { Transaction } from "@/lib/types"
@@ -17,7 +17,7 @@ interface TransactionsListProps {
 
 export default function TransactionsList({ transactions, onClose }: TransactionsListProps) {
   return (
-    <div className="fixed inset-0 bg-gradient-to-b from-blue-400/20 via-blue-200/15 to-blue-300/10 backdrop-blur-md flex items-center justify-center z-50 p-4">
+    <div className="fixed inset-0 bg-black/30 backdrop-blur-sm flex items-center justify-center z-50 p-4">
       <div className="bg-white rounded-xl shadow-2xl w-full max-w-3xl max-h-[90vh] overflow-hidden flex flex-col">
         {/* Modal Header */}
         <div className="bg-gradient-to-r from-blue-600 to-blue-500 p-4 md:p-6 text-white flex justify-between items-center flex-shrink-0">
@@ -35,100 +35,36 @@ export default function TransactionsList({ transactions, onClose }: Transactions
         </div>
 
         {/* Transactions List */}
-        <div className="overflow-y-auto flex-1">
-          <div className="p-4 md:p-6">
-            {/* Table Header */}
-            <div className="hidden md:grid grid-cols-5 gap-4 mb-3 pb-3 border-b-2 border-gray-200">
-              <div className="font-semibold text-gray-700 text-sm">Transaction ID</div>
-              <div className="font-semibold text-gray-700 text-sm">Device</div>
-              <div className="font-semibold text-gray-700 text-sm">Litres</div>
-              <div className="font-semibold text-gray-700 text-sm">Amount</div>
-              <div className="font-semibold text-gray-700 text-sm">Date & Time</div>
+        <div className="overflow-y-auto flex-1 p-4 md:p-6 space-y-3">
+          {transactions.map((txn) => (
+            <div
+              key={txn.id}
+              className="border border-gray-200 rounded-lg p-4 hover:shadow-md transition bg-white"
+            >
+              {/* Transaction Info in Linear Layout */}
+              <div className="space-y-1">
+                <p className="text-gray-800 font-semibold">Transaction ID: <span className="font-normal">{txn.id}</span></p>
+                <p className="text-gray-800 font-semibold">Device: <span className="font-normal">{txn.deviceName}</span></p>
+                <p className="text-gray-800 font-semibold">Amount: <span className="font-normal text-blue-600">KES {txn.amount.toLocaleString()}</span></p>
+                <p className="text-gray-800 font-semibold">Payment Type: <span className="font-normal">M-PESA</span></p>
+                <p className="text-gray-800 font-semibold">Phone: <span className="font-normal break-all">{txn.mpesaNumber}</span></p>
+                <p className="text-gray-800 font-semibold">M-PESA Code: <span className="font-normal">{txn.mpesaCode}</span></p>
+                <p className="text-gray-500 text-xs">
+                  Date:{" "}
+                  {new Intl.DateTimeFormat("en-KE", {
+                    year: "numeric",
+                    month: "short",
+                    day: "numeric",
+                    hour: "2-digit",
+                    minute: "2-digit",
+                    second: "2-digit",
+                    hour12: true,
+                    timeZone: "Africa/Nairobi",
+                  }).format(new Date(txn.timestamp))}
+                </p>
+              </div>
             </div>
-
-            {/* Transaction Rows */}
-            <div className="space-y-3">
-              {transactions.map((txn) => (
-                <div key={txn.id} className="border border-gray-200 rounded-lg p-4 hover:shadow-md transition bg-white">
-                  {/* Mobile Layout */}
-                  <div className="md:hidden space-y-3">
-                    <div className="flex justify-between items-start">
-                      <div>
-                        <p className="font-bold text-base text-gray-800">{txn.id}</p>
-                        <p className="text-xs text-gray-500 mt-1">{txn.deviceName}</p>
-                      </div>
-                      <p className="text-lg font-bold text-blue-600">KES {txn.amount.toLocaleString()}</p>
-                    </div>
-
-                    <div className="grid grid-cols-2 gap-3 text-xs">
-                      {/* <CHANGE> Changed "units" to "litres" */}
-                      <div>
-                        <span className="text-gray-600 font-medium block">Litres</span>
-                        <span className="text-gray-800 font-semibold">{txn.litres}L</span>
-                      </div>
-                      <div>
-                        <span className="text-gray-600 font-medium block">Payment Type</span>
-                        <span className="text-gray-800 font-semibold">M-PESA</span>
-                      </div>
-                      <div>
-                        <span className="text-gray-600 font-medium block">Phone</span>
-                        <span className="text-gray-800 font-semibold break-all">{txn.mpesaNumber}</span>
-                      </div>
-                      <div>
-                        <span className="text-gray-600 font-medium block">M-PESA Code</span>
-                        <span className="text-gray-800 font-semibold">{txn.mpesaCode}</span>
-                      </div>
-                    </div>
-
-                    <div className="pt-2 border-t">
-                      <p className="text-xs text-gray-600 font-medium">
-                        {new Intl.DateTimeFormat("en-KE", {
-                          year: "numeric",
-                          month: "short",
-                          day: "numeric",
-                          hour: "2-digit",
-                          minute: "2-digit",
-                          second: "2-digit",
-                          hour12: true,
-                          timeZone: "Africa/Nairobi",
-                        }).format(new Date(txn.timestamp))}
-                      </p>
-                    </div>
-                  </div>
-
-                  {/* Desktop Layout */}
-                  <div className="hidden md:grid grid-cols-5 gap-4 items-center">
-                    <div>
-                      <p className="font-semibold text-gray-800 text-sm">{txn.id}</p>
-                      <p className="text-xs text-gray-500">{txn.deviceName}</p>
-                    </div>
-
-                    {/* <CHANGE> Changed "units" to "litres" */}
-                    <div className="text-sm text-gray-700">{txn.litres}L</div>
-
-                    <div className="font-bold text-blue-600 text-sm">KES {txn.amount.toLocaleString()}</div>
-
-                    <div className="text-xs">
-                      <p className="text-gray-700 font-medium">{txn.mpesaNumber}</p>
-                      <p className="text-gray-500">{txn.mpesaCode}</p>
-                    </div>
-
-                    <div className="text-xs text-gray-600">
-                      {new Intl.DateTimeFormat("en-KE", {
-                        year: "numeric",
-                        month: "short",
-                        day: "numeric",
-                        hour: "2-digit",
-                        minute: "2-digit",
-                        hour12: true,
-                        timeZone: "Africa/Nairobi",
-                      }).format(new Date(txn.timestamp))}
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
+          ))}
         </div>
 
         {/* Modal Footer */}
@@ -144,3 +80,4 @@ export default function TransactionsList({ transactions, onClose }: Transactions
     </div>
   )
 }
+
