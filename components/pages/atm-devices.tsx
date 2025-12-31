@@ -1,30 +1,48 @@
 /**
  * ATM Devices Page Component
- * Displays a grid of ATM device cards with summary information
- * Clicking a card opens detailed view with full information
- * Allows adding new devices via a modal form
- * Automatically adds a timestamp to each new device
+ * -------------------------
+ * Refactored to fetch devices from backend API
+ * Allows adding new devices via backend POST request
+ * Backend URL is centralized for easy move to env file
  */
 
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import type { Device } from "@/lib/types"
 import DeviceDetailModal from "@/components/modals/device-detail-modal"
 
-interface AtmDevicesProps {
-  devices: Device[]
-}
+// Backend base URL (replace with env variable later)
+const BACKEND_URL = "https://40ed9b23-ce6c-4865-9ea7-673fc391e9ac-00-1earrmirya0dv.picard.replit.dev/api/devices"
 
-export default function AtmDevices({ devices }: AtmDevicesProps) {
+export default function AtmDevices() {
   // State for the device list
-  const [deviceList, setDeviceList] = useState<Device[]>(devices)
+  const [deviceList, setDeviceList] = useState<Device[]>([])
   // State for the selected device for detail modal
   const [selectedDevice, setSelectedDevice] = useState<Device | null>(null)
   // State to control add device modal visibility
   const [showAddModal, setShowAddModal] = useState(false)
   // State for new device input fields
   const [newDevice, setNewDevice] = useState({ id: "", name: "", status: "online" })
+
+  /**
+   * Fetch devices from backend on component mount
+   */
+  useEffect(() => {
+    fetchDevices()
+  }, [])
+
+  const fetchDevices = async () => {
+    try {
+      const res = await fetch(BACKEND_URL)
+      if (!res.ok) throw new Error("Failed to fetch devices")
+      const data: Device[] = await res.json()
+      setDeviceList(data)
+    } catch (error) {
+      console.error("Error fetching devices:", error)
+      alert("Failed to load devices from backend.")
+    }
+  }
 
   /**
    * Handle input field changes
@@ -43,32 +61,40 @@ export default function AtmDevices({ devices }: AtmDevicesProps) {
   }
 
   /**
-   * Add a new device to the list with validation
-   * Automatically adds a lastUpdated timestamp
+   * Add a new device by sending POST request to backend
    */
-  const handleAddDevice = () => {
+  const handleAddDevice = async () => {
     // Validate fields
     if (!newDevice.id.trim() || !newDevice.name.trim()) {
       alert("Please fill in all fields.")
       return
     }
 
-    // Prevent duplicate IDs
-    const exists = deviceList.find((d) => d.id === newDevice.id.trim())
-    if (exists) {
-      alert("A device with this ID already exists.")
-      return
-    }
+    try {
+      const res = await fetch(BACKEND_URL, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(newDevice),
+      })
 
-    // Add timestamp automatically
-    const timestampedDevice: Device = {
-      ...newDevice,
-      lastUpdated: new Date().toISOString() // consistent with data file
-    }
+      const data = await res.json()
 
-    setDeviceList([...deviceList, timestampedDevice])
-    setNewDevice({ id: "", name: "", status: "online" }) // reset form
-    setShowAddModal(false) // close modal
+      if (!res.ok) {
+        // Backend returns 409 or 400
+        alert(data.error || "Failed to add device")
+        return
+      }
+
+      // Success → update local list with new device
+      setDeviceList([...deviceList, { ...newDevice, lastUpdated: new Date().toISOString(), isTampered: false }])
+      setNewDevice({ id: "", name: "", status: "online" }) // reset form
+      setShowAddModal(false) // close modal
+    } catch (error) {
+      console.error("Error adding device:", error)
+      alert("Failed to add device. Check backend connection.")
+    }
   }
 
   return (
@@ -91,7 +117,7 @@ export default function AtmDevices({ devices }: AtmDevicesProps) {
         </button>
       </div>
 
-      {/* Devices Grid - Responsive grid */}
+      {/* Devices Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-6">
         {deviceList.map((device) => (
           <div
