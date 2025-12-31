@@ -1,50 +1,111 @@
 /**
- * Price Management Component
- * Allows the user to view and update the milk price per litre
- * All data is read from the centralized data file
+ * Price Management Component (Backend Connected)
+ * ----------------------------------------------
+ * Fetches and updates the milk price per litre from the backend API
+ * Shows success/error feedback on price update
  */
 
 "use client"
 
-import { useState } from "react"
-import { DollarSign } from "lucide-react"
+import { useState, useEffect } from "react"
+import { DollarSign, RefreshCw } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import type { Pricing } from "@/lib/types"
 
-interface PriceProps {
-  pricing: Pricing
-  onUpdatePrice: (newPrice: number) => void
-}
+const BACKEND_URL = "https://40ed9b23-ce6c-4865-9ea7-673fc391e9ac-00-1earrmirya0dv.picard.replit.dev" // move to env later
 
-export default function Price({ pricing, onUpdatePrice }: PriceProps) {
+export default function Price() {
+  const [pricing, setPricing] = useState<Pricing>({ pricePerLitre: 0 })
+  const [newPrice, setNewPrice] = useState("")
   const [isEditing, setIsEditing] = useState(false)
-  const [newPrice, setNewPrice] = useState(pricing.pricePerLitre.toString())
-  const [error, setError] = useState("")
+  const [loading, setLoading] = useState(false)
+  const [feedback, setFeedback] = useState<{ type: "success" | "error"; message: string } | null>(null)
 
-  const handleSetPrice = () => {
+  // Fetch current price from backend
+  const fetchPrice = async () => {
+    setLoading(true)
+    try {
+      const res = await fetch(`${BACKEND_URL}/api/pricing`)
+      const data = await res.json()
+      setPricing(data)
+      setNewPrice(data.pricePerLitre.toString())
+      setFeedback(null)
+    } catch (error) {
+      console.error("Failed to fetch price:", error)
+      setFeedback({ type: "error", message: "Failed to fetch current price" })
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  useEffect(() => {
+    fetchPrice()
+  }, [])
+
+  // Update price on backend
+  const handleSetPrice = async () => {
     const price = parseInt(newPrice)
-    
     if (isNaN(price) || price <= 0) {
-      setError("Please enter a valid price greater than 0")
+      setFeedback({ type: "error", message: "Please enter a valid price greater than 0" })
       return
     }
 
-    onUpdatePrice(price)
-    setIsEditing(false)
-    setError("")
+    setLoading(true)
+    try {
+      const res = await fetch(`${BACKEND_URL}/api/pricing`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ pricePerLitre: price }),
+      })
+
+      const data = await res.json()
+
+      if (res.ok && data.success) {
+        setPricing({ pricePerLitre: price })
+        setFeedback({ type: "success", message: data.message || "Price updated successfully" })
+        setIsEditing(false)
+      } else {
+        setFeedback({ type: "error", message: data.error || "Failed to update price" })
+      }
+    } catch (error) {
+      console.error("Error updating price:", error)
+      setFeedback({ type: "error", message: "Failed to update price" })
+    } finally {
+      setLoading(false)
+    }
   }
 
   return (
     <div className="p-4 sm:p-6 lg:p-8 max-w-4xl mx-auto">
-      <div className="mb-6">
-        <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">Price Management</h1>
-        <p className="text-sm sm:text-base text-gray-600 mt-2">
-          Set and manage the milk price per litre
-        </p>
+      {/* Header */}
+      <div className="mb-6 flex items-center justify-between">
+        <div>
+          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">Price Management</h1>
+          <p className="text-sm sm:text-base text-gray-600 mt-2">
+            Set and manage the milk price per litre
+          </p>
+        </div>
+        {/* Optional Refresh Button */}
+        <Button onClick={fetchPrice} variant="outline" className="flex items-center gap-2 text-sm">
+          <RefreshCw className="w-4 h-4" />
+          Refresh
+        </Button>
       </div>
 
+      {/* Feedback Message */}
+      {feedback && (
+        <div
+          className={`mb-4 p-3 rounded ${
+            feedback.type === "success" ? "bg-green-50 text-green-700" : "bg-red-50 text-red-700"
+          }`}
+        >
+          {feedback.message}
+        </div>
+      )}
+
       <Card className="p-6 sm:p-8">
+        {/* Current Price */}
         <div className="flex items-center gap-3 mb-6">
           <div className="p-3 bg-green-100 rounded-lg">
             <DollarSign className="h-6 w-6 text-green-600" />
@@ -52,20 +113,18 @@ export default function Price({ pricing, onUpdatePrice }: PriceProps) {
           <div>
             <p className="text-sm text-gray-600">Current Price Per Litre</p>
             <p className="text-3xl sm:text-4xl font-bold text-gray-900">
-              KES {pricing.pricePerLitre}
+              {loading ? "Loading..." : `KES ${pricing.pricePerLitre}`}
             </p>
           </div>
         </div>
 
+        {/* Edit Section */}
         {!isEditing ? (
           <div>
             <p className="text-sm text-gray-600 mb-4">
               This price is used to calculate all sales analytics and revenue across the system.
             </p>
-            <Button 
-              onClick={() => setIsEditing(true)}
-              className="w-full sm:w-auto"
-            >
+            <Button onClick={() => setIsEditing(true)} className="w-full sm:w-auto">
               Set New Price
             </Button>
           </div>
@@ -81,29 +140,24 @@ export default function Price({ pricing, onUpdatePrice }: PriceProps) {
                 value={newPrice}
                 onChange={(e) => {
                   setNewPrice(e.target.value)
-                  setError("")
+                  setFeedback(null)
                 }}
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 placeholder="Enter price"
                 min="1"
               />
-              {error && (
-                <p className="text-red-600 text-sm mt-2">{error}</p>
-              )}
             </div>
-            
+
+            {/* Buttons */}
             <div className="flex flex-col sm:flex-row gap-3">
-              <Button 
-                onClick={handleSetPrice}
-                className="flex-1"
-              >
-                Confirm Price
+              <Button onClick={handleSetPrice} className="flex-1" disabled={loading}>
+                {loading ? "Saving..." : "Confirm Price"}
               </Button>
-              <Button 
+              <Button
                 onClick={() => {
                   setIsEditing(false)
                   setNewPrice(pricing.pricePerLitre.toString())
-                  setError("")
+                  setFeedback(null)
                 }}
                 variant="outline"
                 className="flex-1"
@@ -115,13 +169,15 @@ export default function Price({ pricing, onUpdatePrice }: PriceProps) {
         )}
       </Card>
 
+      {/* Price Impact Info */}
       <Card className="mt-6 p-6 bg-blue-50 border-blue-200">
         <h3 className="font-semibold text-gray-900 mb-2">Price Impact</h3>
         <p className="text-sm text-gray-600">
-          Changing the price per litre will affect all future sales calculations and analytics. 
+          Changing the price per litre will affect all future sales calculations and analytics.
           Historical transactions will retain their original values.
         </p>
       </Card>
     </div>
   )
 }
+
