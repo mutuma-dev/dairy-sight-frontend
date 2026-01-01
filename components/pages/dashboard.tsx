@@ -126,12 +126,6 @@ export default function Dashboard({ appData, vendorUpdatedTrigger }: DashboardPr
               <span className="font-semibold">Vendor:</span> {vendor.name}
               <span className="mx-2 text-gray-300">|</span>
               <span className="font-semibold">ID:</span> {vendor.id}
-              {/* Manual refresh vendor */}
-              <RefreshCw
-                className="w-4 h-4 text-gray-500 hover:text-gray-700 cursor-pointer"
-                onClick={fetchVendor}
-                title="Refresh vendor"
-              />
             </>
           ) : (
             <span className="text-red-500">{vendorError || "Vendor not found"}</span>
