@@ -1,16 +1,17 @@
 /**
  * Dashboard Page Component
  * ------------------------
- * Displays key metrics (Total Sales, Active Devices, Peak Hour, Alerts)
- * Fetches devices and recent transactions from backend
- * Allows manual refresh with subtle icons
+ * Displays key metrics: Total Sales, Active Devices, Peak Hour, Alerts
+ * Fetches devices, recent transactions, and vendor details from backend
+ * Supports manual refresh for devices, transactions, and vendor details
+ * Vendor details automatically update if edited in Account component
  * Fully responsive design for mobile and desktop
  */
 
 "use client"
 
 import { useState, useEffect } from "react"
-import type { AppData, Device, Transaction } from "@/lib/types"
+import type { AppData, Device, Transaction, Vendor } from "@/lib/types"
 import StatsCard from "@/components/cards/stats-card"
 import TransactionsList from "@/components/modals/transactions-list"
 import AlertsList from "@/components/modals/alerts-list"
@@ -22,13 +23,19 @@ const BACKEND_URL = "https://40ed9b23-ce6c-4865-9ea7-673fc391e9ac-00-1earrmirya0
 
 interface DashboardProps {
   appData: AppData // static data for analytics, alerts, pricing, etc.
+  vendorUpdatedTrigger?: number // incremented whenever vendor is edited
 }
 
-export default function Dashboard({ appData }: DashboardProps) {
-  // Modal state
+export default function Dashboard({ appData, vendorUpdatedTrigger }: DashboardProps) {
+  // Modal states
   const [showTransactions, setShowTransactions] = useState(false)
   const [showAlerts, setShowAlerts] = useState(false)
   const [showDeviceStatus, setShowDeviceStatus] = useState(false)
+
+  // Vendor state
+  const [vendor, setVendor] = useState<Vendor | null>(null)
+  const [loadingVendor, setLoadingVendor] = useState(true)
+  const [vendorError, setVendorError] = useState("")
 
   // Devices state
   const [devices, setDevices] = useState<Device[]>([])
@@ -40,7 +47,23 @@ export default function Dashboard({ appData }: DashboardProps) {
   const [loadingTransactions, setLoadingTransactions] = useState(true)
   const [transactionError, setTransactionError] = useState("")
 
-  // Fetch devices from backend
+  /** Fetch vendor details from backend */
+  const fetchVendor = async () => {
+    setLoadingVendor(true)
+    setVendorError("")
+    try {
+      const res = await fetch(`${BACKEND_URL}/api/vendor`)
+      if (!res.ok) throw new Error("Failed to fetch vendor details")
+      const data: Vendor = await res.json()
+      setVendor(data)
+    } catch (err: any) {
+      setVendorError(err.message || "Unknown error fetching vendor")
+    } finally {
+      setLoadingVendor(false)
+    }
+  }
+
+  /** Fetch devices from backend */
   const fetchDevices = async () => {
     setLoadingDevices(true)
     setDeviceError("")
@@ -56,7 +79,7 @@ export default function Dashboard({ appData }: DashboardProps) {
     }
   }
 
-  // Fetch transactions from backend
+  /** Fetch transactions from backend */
   const fetchTransactions = async () => {
     setLoadingTransactions(true)
     setTransactionError("")
@@ -74,10 +97,19 @@ export default function Dashboard({ appData }: DashboardProps) {
 
   // Initial fetch on mount
   useEffect(() => {
+    fetchVendor()
     fetchDevices()
     fetchTransactions()
   }, [])
 
+  // Re-fetch vendor whenever the Account component edits it
+  useEffect(() => {
+    if (vendorUpdatedTrigger !== undefined) {
+      fetchVendor()
+    }
+  }, [vendorUpdatedTrigger])
+
+  // Derived stats
   const onlineDevices = devices.filter((d) => d.status === "online").length
   const totalDevices = devices.length
 
@@ -86,10 +118,24 @@ export default function Dashboard({ appData }: DashboardProps) {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between mt-12 lg:mt-0 gap-2">
         <h1 className="text-xl md:text-2xl lg:text-3xl font-bold text-gray-800">Dashboard</h1>
-        <div className="text-sm text-gray-600 bg-white px-3 py-1.5 rounded-lg shadow-sm border border-gray-100 self-start">
-          <span className="font-semibold">Vendor:</span> {appData.vendor.name}
-          <span className="mx-2 text-gray-300">|</span>
-          <span className="font-semibold">ID:</span> {appData.vendor.id}
+        <div className="text-sm text-gray-600 bg-white px-3 py-1.5 rounded-lg shadow-sm border border-gray-100 self-start flex items-center gap-2">
+          {loadingVendor ? (
+            <span>Loading vendor...</span>
+          ) : vendor ? (
+            <>
+              <span className="font-semibold">Vendor:</span> {vendor.name}
+              <span className="mx-2 text-gray-300">|</span>
+              <span className="font-semibold">ID:</span> {vendor.id}
+              {/* Manual refresh vendor */}
+              <RefreshCw
+                className="w-4 h-4 text-gray-500 hover:text-gray-700 cursor-pointer"
+                onClick={fetchVendor}
+                title="Refresh vendor"
+              />
+            </>
+          ) : (
+            <span className="text-red-500">{vendorError || "Vendor not found"}</span>
+          )}
         </div>
       </div>
 
@@ -138,7 +184,6 @@ export default function Dashboard({ appData }: DashboardProps) {
         <div className="flex items-center justify-between mb-4">
           <h3 className="text-base md:text-lg font-semibold text-gray-800 flex items-center gap-2">
             Recent Transactions
-            {/* Refresh icon */}
             <RefreshCw
               className="w-4 h-4 text-gray-500 hover:text-gray-700 cursor-pointer"
               onClick={fetchTransactions}
@@ -194,7 +239,6 @@ export default function Dashboard({ appData }: DashboardProps) {
         <div className="flex items-center justify-between mb-4">
           <h3 className="text-base md:text-lg font-semibold text-gray-800 flex items-center gap-2">
             Device Status
-            {/* Refresh icon */}
             <RefreshCw
               className="w-4 h-4 text-gray-500 hover:text-gray-700 cursor-pointer"
               onClick={fetchDevices}
