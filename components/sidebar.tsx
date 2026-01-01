@@ -115,13 +115,6 @@ export default function Sidebar({ currentPage, onPageChange, isOpen, onToggle, v
             ) : (
               <span className="text-red-500 text-xs">{vendorError || "Vendor not found"}</span>
             )}
-
-            {/* Manual refresh icon */}
-            <RefreshCw
-              className="w-4 h-4 text-blue-100 hover:text-white cursor-pointer ml-2"
-              onClick={fetchVendor}
-              title="Refresh vendor"
-            />
           </div>
         </div>
 
