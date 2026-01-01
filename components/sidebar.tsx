@@ -3,7 +3,7 @@
  * ----------------------------
  * Displays the main navigation menu with vendor info
  * Fetches vendor details from the backend
- * Vendor info refreshes automatically when updated from Account component
+ * Vendor info refreshes automatically when sidebar is opened
  * Handles page navigation and mobile menu toggle
  * Fully responsive with collapsible mobile sidebar
  */
@@ -22,7 +22,7 @@ interface SidebarProps {
   onPageChange: (page: string) => void
   isOpen: boolean
   onToggle: () => void
-  vendorUpdatedTrigger?: number // increments when vendor details edited
+  vendorUpdatedTrigger?: number // increments when vendor details edited in Account component
 }
 
 export default function Sidebar({ currentPage, onPageChange, isOpen, onToggle, vendorUpdatedTrigger }: SidebarProps) {
@@ -31,7 +31,9 @@ export default function Sidebar({ currentPage, onPageChange, isOpen, onToggle, v
   const [loadingVendor, setLoadingVendor] = useState(true)
   const [vendorError, setVendorError] = useState("")
 
-  /** Fetch vendor details from backend */
+  /**
+   * Fetch vendor details from backend
+   */
   const fetchVendor = async () => {
     setLoadingVendor(true)
     setVendorError("")
@@ -58,6 +60,13 @@ export default function Sidebar({ currentPage, onPageChange, isOpen, onToggle, v
       fetchVendor()
     }
   }, [vendorUpdatedTrigger])
+
+  // Re-fetch vendor anytime sidebar is opened
+  useEffect(() => {
+    if (isOpen) {
+      fetchVendor()
+    }
+  }, [isOpen])
 
   // Navigation menu items
   const menuItems = [
@@ -115,6 +124,13 @@ export default function Sidebar({ currentPage, onPageChange, isOpen, onToggle, v
             ) : (
               <span className="text-red-500 text-xs">{vendorError || "Vendor not found"}</span>
             )}
+
+            {/* Manual refresh icon */}
+            <RefreshCw
+              className="w-4 h-4 text-blue-100 hover:text-white cursor-pointer ml-2"
+              onClick={fetchVendor}
+              title="Refresh vendor"
+            />
           </div>
         </div>
 
