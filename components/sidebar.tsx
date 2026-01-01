@@ -1,24 +1,65 @@
 /**
  * Sidebar Navigation Component
+ * ----------------------------
  * Displays the main navigation menu with vendor info
- * Handles page navigation and menu item selection
+ * Fetches vendor details from the backend
+ * Vendor info refreshes automatically when updated from Account component
+ * Handles page navigation and mobile menu toggle
+ * Fully responsive with collapsible mobile sidebar
  */
 
 "use client"
 
+import { useState, useEffect } from "react"
 import type { Vendor } from "@/lib/types"
-import { BarChart3, Zap, Lock, LayoutDashboard, Menu, DollarSign, Wallet } from "lucide-react"
+import { BarChart3, Zap, Lock, LayoutDashboard, Menu, DollarSign, Wallet, RefreshCw } from "lucide-react"
+
+// Backend URL (replace with env variable later)
+const BACKEND_URL = "https://40ed9b23-ce6c-4865-9ea7-673fc391e9ac-00-1earrmirya0dv.picard.replit.dev"
 
 interface SidebarProps {
   currentPage: string
   onPageChange: (page: string) => void
-  vendor: Vendor
   isOpen: boolean
   onToggle: () => void
+  vendorUpdatedTrigger?: number // increments when vendor details edited
 }
 
-export default function Sidebar({ currentPage, onPageChange, vendor, isOpen, onToggle }: SidebarProps) {
-  // <CHANGE> Added Price and Account menu items
+export default function Sidebar({ currentPage, onPageChange, isOpen, onToggle, vendorUpdatedTrigger }: SidebarProps) {
+  // Local vendor state
+  const [vendor, setVendor] = useState<Vendor | null>(null)
+  const [loadingVendor, setLoadingVendor] = useState(true)
+  const [vendorError, setVendorError] = useState("")
+
+  /** Fetch vendor details from backend */
+  const fetchVendor = async () => {
+    setLoadingVendor(true)
+    setVendorError("")
+    try {
+      const res = await fetch(`${BACKEND_URL}/api/vendor`)
+      if (!res.ok) throw new Error("Failed to fetch vendor details")
+      const data: Vendor = await res.json()
+      setVendor(data)
+    } catch (err: any) {
+      setVendorError(err.message || "Unknown error fetching vendor")
+    } finally {
+      setLoadingVendor(false)
+    }
+  }
+
+  // Initial fetch on mount
+  useEffect(() => {
+    fetchVendor()
+  }, [])
+
+  // Re-fetch vendor when Account component triggers update
+  useEffect(() => {
+    if (vendorUpdatedTrigger !== undefined) {
+      fetchVendor()
+    }
+  }, [vendorUpdatedTrigger])
+
+  // Navigation menu items
   const menuItems = [
     { id: "dashboard", label: "Dashboard", icon: LayoutDashboard },
     { id: "atm-devices", label: "ATM Devices", icon: Zap },
@@ -30,6 +71,7 @@ export default function Sidebar({ currentPage, onPageChange, vendor, isOpen, onT
 
   return (
     <>
+      {/* Mobile toggle button */}
       <button
         onClick={onToggle}
         className="fixed lg:hidden top-4 left-4 z-50 p-2 rounded-lg bg-blue-600 text-white hover:bg-blue-700 shadow-lg"
@@ -38,7 +80,7 @@ export default function Sidebar({ currentPage, onPageChange, vendor, isOpen, onT
         <Menu size={24} strokeWidth={1.5} />
       </button>
 
-      {/* Backdrop overlay for mobile */}
+      {/* Mobile backdrop overlay */}
       {isOpen && (
         <div
           className="fixed inset-0 bg-black/30 backdrop-blur-sm z-30 lg:hidden"
@@ -47,6 +89,7 @@ export default function Sidebar({ currentPage, onPageChange, vendor, isOpen, onT
         />
       )}
 
+      {/* Sidebar */}
       <aside
         className={`fixed lg:relative w-56 bg-blue-600 text-white flex flex-col transform transition-transform duration-300 ease-in-out z-40 h-screen ${
           isOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"
@@ -55,18 +98,34 @@ export default function Sidebar({ currentPage, onPageChange, vendor, isOpen, onT
         {/* Header */}
         <div className="p-4 lg:p-6 border-b border-blue-500">
           <h1 className="text-lg lg:text-xl font-bold text-white">Dairy Sight</h1>
-          {/* <CHANGE> Show vendor name and ID */}
-          <div className="mt-2 space-y-1">
-            <p className="text-blue-100 text-xs">
-              <span className="font-semibold">Vendor Name:</span> {vendor.name}
-            </p>
-            <p className="text-blue-100 text-xs">
-              <span className="font-semibold">Vendor ID:</span> {vendor.id}
-            </p>
+
+          {/* Vendor details */}
+          <div className="mt-2 space-y-1 flex items-center justify-between">
+            {loadingVendor ? (
+              <span className="text-blue-100 text-xs">Loading vendor...</span>
+            ) : vendor ? (
+              <div className="flex-1 space-y-1">
+                <p className="text-blue-100 text-xs">
+                  <span className="font-semibold">Vendor Name:</span> {vendor.name}
+                </p>
+                <p className="text-blue-100 text-xs">
+                  <span className="font-semibold">Vendor ID:</span> {vendor.id}
+                </p>
+              </div>
+            ) : (
+              <span className="text-red-500 text-xs">{vendorError || "Vendor not found"}</span>
+            )}
+
+            {/* Manual refresh icon */}
+            <RefreshCw
+              className="w-4 h-4 text-blue-100 hover:text-white cursor-pointer ml-2"
+              onClick={fetchVendor}
+              title="Refresh vendor"
+            />
           </div>
         </div>
 
-        {/* Navigation Menu */}
+        {/* Navigation menu */}
         <nav className="flex-1 p-3 lg:p-4 overflow-y-auto">
           <ul className="space-y-1 lg:space-y-2">
             {menuItems.map((item) => {
@@ -93,9 +152,10 @@ export default function Sidebar({ currentPage, onPageChange, vendor, isOpen, onT
 
         {/* Footer */}
         <div className="p-3 lg:p-4 border-t border-blue-500">
-          <p className="text-xs text-blue-100 truncate">{vendor.shopName}</p>
+          <p className="text-xs text-blue-100 truncate">{vendor?.shopName || "..."}</p>
         </div>
       </aside>
     </>
   )
 }
+
