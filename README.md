@@ -4,12 +4,8 @@ The system contains several modules user management, account management,device m
 The milk vendor machines contain IoT devices that vend milk and communicate to our system for management of data and analytics.
 This system contains mpesa payments and uses sqlite database to strore data.
 
-## Overview
-
-This website url is https://dairy-sight-frontend.vercel.app
-
 ## Screenshots
-
+<p align="center">
 <img src="public/dairysight-home.png" width="400"/>
 <img src="public/dairysight-transactions.png" width="400"/>
 <img src="public/dairysight-devicestatus.png" width="400"/>
@@ -20,3 +16,12 @@ This website url is https://dairy-sight-frontend.vercel.app
 <img src="public/dairysight-price.png" width="400"/>
 <img src="public/dairysight-sales.png" width="400"/>
 <img src="public/dairysight-account.png" width="400"/>
+</p>
+
+## Overview
+
+This website url is https://dairy-sight-frontend.vercel.app
+
+
+
+
