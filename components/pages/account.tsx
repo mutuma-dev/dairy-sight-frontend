@@ -14,10 +14,13 @@ import { useState, useEffect } from "react"
 import { Wallet, ArrowDownToLine, Edit, Check, X } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
-import { formatKenyanDateTime } from "@/lib/utils"
 import type { Account, Vendor } from "@/lib/types"
 
-export default function AccountPage({ account, onWithdraw }: { account: Account; onWithdraw: (amount: number) => void }) {
+export default function AccountPage() {
+  // State for account
+  const [account, setAccount] = useState<Account | null>(null)
+  const [loadingAccount, setLoadingAccount] = useState(true)
+
   // State for vendor details
   const [vendor, setVendor] = useState<Vendor | null>(null)
   const [loadingVendor, setLoadingVendor] = useState(true)
@@ -31,9 +34,25 @@ export default function AccountPage({ account, onWithdraw }: { account: Account;
   const [withdrawAmount, setWithdrawAmount] = useState("")
   const [error, setError] = useState("")
 
-  const API_BASE = "https://40ed9b23-ce6c-4865-9ea7-673fc391e9ac-00-1earrmirya0dv.picard.replit.dev/api" // move to env later
+  // Base URL (replace with env later)
+  const API_BASE = process.env.NEXT_PUBLIC_API_BASE || "https://40ed9b23-ce6c-4865-9ea7-673fc391e9ac-00-1earrmirya0dv.picard.replit.dev/api"
 
-  // Fetch vendor details from backend
+  // Fetch account data
+  const fetchAccount = async () => {
+    try {
+      setLoadingAccount(true)
+      const res = await fetch(`${API_BASE}/account`)
+      if (!res.ok) throw new Error("Failed to fetch account data")
+      const data: Account = await res.json()
+      setAccount(data)
+    } catch (err: any) {
+      console.error(err)
+    } finally {
+      setLoadingAccount(false)
+    }
+  }
+
+  // Fetch vendor details
   const fetchVendor = async () => {
     try {
       setLoadingVendor(true)
@@ -52,6 +71,7 @@ export default function AccountPage({ account, onWithdraw }: { account: Account;
   }
 
   useEffect(() => {
+    fetchAccount()
     fetchVendor()
   }, [])
 
@@ -75,40 +95,65 @@ export default function AccountPage({ account, onWithdraw }: { account: Account;
 
       setVendorFeedback({ message: "Vendor updated successfully ✅", success: true })
       setEditMode(false)
-      fetchVendor() // refresh details immediately
+      fetchVendor()
     } catch (err: any) {
       console.error(err)
       setVendorFeedback({ message: err.message || "Update failed ❌", success: false })
     } finally {
-      setTimeout(() => setVendorFeedback(null), 3000) // clear feedback after 3s
+      setTimeout(() => setVendorFeedback(null), 3000)
     }
   }
 
   // Handle withdrawal
-  const handleWithdraw = () => {
+  const handleWithdraw = async () => {
     const amount = parseInt(withdrawAmount)
     if (isNaN(amount) || amount <= 0) {
       setError("Please enter a valid amount greater than 0")
       return
     }
-    if (amount > account.balance) {
-      setError(`Insufficient balance. Current balance KES ${account.balance.toLocaleString()}`)
-      return
+
+    try {
+      const res = await fetch(`${API_BASE}/account/withdraw`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ amount }),
+      })
+      const data = await res.json()
+      if (!res.ok) throw new Error(data.error || "Withdrawal failed")
+
+      setAccount(data) // Update account state with new balance + withdrawal
+      setIsWithdrawing(false)
+      setWithdrawAmount("")
+      setError("")
+    } catch (err: any) {
+      console.error(err)
+      setError(err.message || "Error processing withdrawal")
     }
-    onWithdraw(amount)
-    setIsWithdrawing(false)
-    setWithdrawAmount("")
-    setError("")
+  }
+
+  // Handle deposit (optional)
+  const handleDeposit = async (amount: number) => {
+    try {
+      const res = await fetch(`${API_BASE}/account/deposit`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ amount }),
+      })
+      const data = await res.json()
+      if (!res.ok) throw new Error(data.error || "Deposit failed")
+
+      setAccount(data)
+    } catch (err: any) {
+      console.error(err)
+    }
   }
 
   return (
     <div className="p-4 sm:p-6 lg:p-8 max-w-4xl mx-auto space-y-6">
-      <div className="mb-6">
-        <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">Account</h1>
-        <p className="text-sm sm:text-base text-gray-600 mt-2">Manage your account balance, withdrawals, and vendor info</p>
-      </div>
+      <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">Account</h1>
+      <p className="text-sm sm:text-base text-gray-600 mt-2">Manage your account balance, withdrawals, and vendor info</p>
 
-      {/* Vendor Details Card */}
+      {/* Vendor Card */}
       <Card className="p-4 sm:p-6 relative">
         {loadingVendor ? (
           <p className="text-gray-500">Loading vendor details...</p>
@@ -144,20 +189,17 @@ export default function AccountPage({ account, onWithdraw }: { account: Account;
                 <p className="font-semibold text-gray-900">{vendor.id}</p>
               </div>
 
-              {/* Edit / Save / Cancel Icons */}
               <div className="flex gap-2 mt-1">
                 {!editMode ? (
                   <Edit
                     className="w-5 h-5 text-gray-500 cursor-pointer hover:text-blue-600"
                     onClick={() => setEditMode(true)}
-                    title="Edit Vendor"
                   />
                 ) : (
                   <>
                     <Check
                       className="w-5 h-5 text-green-600 cursor-pointer"
                       onClick={handleVendorUpdate}
-                      title="Save Changes"
                     />
                     <X
                       className="w-5 h-5 text-red-600 cursor-pointer"
@@ -166,18 +208,14 @@ export default function AccountPage({ account, onWithdraw }: { account: Account;
                         setVendorName(vendor.name)
                         setShopName(vendor.shopName)
                       }}
-                      title="Cancel"
                     />
                   </>
                 )}
               </div>
             </div>
 
-            {/* Feedback */}
             {vendorFeedback && (
-              <p
-                className={`mt-2 text-sm ${vendorFeedback.success ? "text-green-600" : "text-red-600"}`}
-              >
+              <p className={`mt-2 text-sm ${vendorFeedback.success ? "text-green-600" : "text-red-600"}`}>
                 {vendorFeedback.message}
               </p>
             )}
@@ -187,7 +225,7 @@ export default function AccountPage({ account, onWithdraw }: { account: Account;
         )}
       </Card>
 
-      {/* Account Balance Card */}
+      {/* Account Card */}
       <Card className="p-6 sm:p-8">
         <div className="flex items-center gap-3 mb-6">
           <div className="p-3 bg-green-100 rounded-lg">
@@ -196,7 +234,7 @@ export default function AccountPage({ account, onWithdraw }: { account: Account;
           <div>
             <p className="text-sm text-gray-600">Available Balance</p>
             <p className="text-3xl sm:text-4xl font-bold text-gray-900">
-              KES {account.balance.toLocaleString()}
+              KES {account?.balance?.toLocaleString() || 0}
             </p>
           </div>
         </div>
@@ -222,15 +260,13 @@ export default function AccountPage({ account, onWithdraw }: { account: Account;
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 placeholder="Enter amount"
                 min="1"
-                max={account.balance}
+                max={account?.balance || 0}
               />
               {error && <p className="text-red-600 text-sm mt-2">{error}</p>}
             </div>
 
             <div className="flex flex-col sm:flex-row gap-3">
-              <Button onClick={handleWithdraw} className="flex-1">
-                Confirm Withdrawal
-              </Button>
+              <Button onClick={handleWithdraw} className="flex-1">Confirm Withdrawal</Button>
               <Button
                 onClick={() => {
                   setIsWithdrawing(false)
@@ -249,4 +285,5 @@ export default function AccountPage({ account, onWithdraw }: { account: Account;
     </div>
   )
 }
+
 
