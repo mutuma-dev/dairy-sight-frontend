@@ -3,8 +3,7 @@
 /**
  * Device Detail Modal Component
  * Displays full information about a device when clicked from the device list
- * Shows all device properties except available stock and capacity
- * Can be used for both ATM Devices and Tamper Detection pages
+ * Shows all device properties including temperature and capacity
  */
 
 import type { Device } from "@/lib/types"
@@ -15,6 +14,17 @@ interface DeviceDetailModalProps {
 }
 
 export default function DeviceDetailModal({ device, onClose }: DeviceDetailModalProps) {
+  // Calculate capacity percentage (assume max capacity = 100L)
+  const capacityPercent = Math.min((device.capacity / 100) * 100, 100)
+
+  // Determine bar color based on capacity level
+  const capacityBarColor =
+    capacityPercent >= 50
+      ? "bg-green-500"
+      : capacityPercent >= 25
+      ? "bg-yellow-400"
+      : "bg-red-500"
+
   return (
     <div className="fixed inset-0 bg-gradient-to-b from-blue-400/20 via-blue-200/15 to-blue-300/10 backdrop-blur-md flex items-center justify-center z-50 p-4">
       <div className="bg-white rounded-lg shadow-xl max-w-md w-full max-h-[90vh] overflow-y-auto">
@@ -44,7 +54,38 @@ export default function DeviceDetailModal({ device, onClose }: DeviceDetailModal
                   device.status === "online" ? "bg-green-500" : "bg-red-500"
                 }`}
               ></span>
-              <span className="text-base md:text-lg font-semibold text-gray-800 capitalize">{device.status}</span>
+              <span className="text-base md:text-lg font-semibold text-gray-800 capitalize">
+                {device.status}
+              </span>
+            </div>
+          </div>
+
+          {/* Temperature */}
+          <div className="bg-gray-50 rounded-lg p-3 md:p-4">
+            <p className="text-gray-600 text-xs md:text-sm font-medium mb-2">Temperature</p>
+            <span className="text-base md:text-lg font-semibold text-gray-800">
+              {device.temperature.toFixed(2)}°C
+            </span>
+          </div>
+
+          {/* Capacity */}
+          <div className="bg-gray-50 rounded-lg p-3 md:p-4">
+            <p className="text-gray-600 text-xs md:text-sm font-medium mb-2">Capacity</p>
+
+            <div className="flex justify-between items-center mb-1">
+              <span className="text-base md:text-lg font-semibold text-gray-800">
+                {device.capacity.toFixed(2)} L
+              </span>
+              <span className="text-xs text-gray-500">
+                {capacityPercent.toFixed(0)}%
+              </span>
+            </div>
+
+            <div className="w-full h-2 bg-gray-200 rounded-full overflow-hidden">
+              <div
+                className={`h-full ${capacityBarColor} rounded-full transition-all duration-300`}
+                style={{ width: `${capacityPercent}%` }}
+              ></div>
             </div>
           </div>
 
@@ -78,4 +119,3 @@ export default function DeviceDetailModal({ device, onClose }: DeviceDetailModal
     </div>
   )
 }
-
