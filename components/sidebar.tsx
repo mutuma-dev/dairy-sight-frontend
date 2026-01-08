@@ -15,7 +15,7 @@ import type { Vendor } from "@/lib/types"
 import { BarChart3, Zap, Lock, LayoutDashboard, Menu, DollarSign, Wallet, RefreshCw } from "lucide-react"
 
 // Backend URL (replace with env variable later)
-const BACKEND_URL = "https://40ed9b23-ce6c-4865-9ea7-673fc391e9ac-00-1earrmirya0dv.picard.replit.dev"
+const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL
 
 interface SidebarProps {
   currentPage: string
