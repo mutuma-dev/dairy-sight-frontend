@@ -14,8 +14,19 @@ interface DeviceDetailModalProps {
 }
 
 export default function DeviceDetailModal({ device, onClose }: DeviceDetailModalProps) {
+  /**
+   * -------------------------
+   * SAFETY NORMALIZATION
+   * -------------------------
+   * Prevents runtime crashes if backend returns
+   * undefined/null values (old DB rows, partial data)
+   */
+
+  const temperatureValue = device.temperature ?? 4.0
+  const capacityValue = device.capacity ?? 100.0
+
   // Calculate capacity percentage (assume max capacity = 100L)
-  const capacityPercent = Math.min((device.capacity / 100) * 100, 100)
+  const capacityPercent = Math.min((capacityValue / 100) * 100, 100)
 
   // Determine bar color based on capacity level
   const capacityBarColor =
@@ -64,7 +75,7 @@ export default function DeviceDetailModal({ device, onClose }: DeviceDetailModal
           <div className="bg-gray-50 rounded-lg p-3 md:p-4">
             <p className="text-gray-600 text-xs md:text-sm font-medium mb-2">Temperature</p>
             <span className="text-base md:text-lg font-semibold text-gray-800">
-              {device.temperature.toFixed(2)}°C
+              {temperatureValue.toFixed(2)}°C
             </span>
           </div>
 
@@ -74,7 +85,7 @@ export default function DeviceDetailModal({ device, onClose }: DeviceDetailModal
 
             <div className="flex justify-between items-center mb-1">
               <span className="text-base md:text-lg font-semibold text-gray-800">
-                {device.capacity.toFixed(2)} L
+                {capacityValue.toFixed(2)} L
               </span>
               <span className="text-xs text-gray-500">
                 {capacityPercent.toFixed(0)}%
