@@ -19,7 +19,7 @@ import DeviceStatusList from "@/components/modals/device-status-list"
 import { RefreshCw } from "lucide-react" // subtle refresh icon
 
 // Backend base URL (replace with env variable later)
-const BACKEND_URL = "https://40ed9b23-ce6c-4865-9ea7-673fc391e9ac-00-1earrmirya0dv.picard.replit.dev"
+const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL
 
 interface DashboardProps {
   appData: AppData // static data for analytics, alerts, pricing, etc.
@@ -181,7 +181,6 @@ export default function Dashboard({ appData, vendorUpdatedTrigger }: DashboardPr
             <RefreshCw
               className="w-4 h-4 text-gray-500 hover:text-gray-700 cursor-pointer"
               onClick={fetchTransactions}
-              title="Refresh transactions"
             />
           </h3>
           <button
@@ -236,7 +235,6 @@ export default function Dashboard({ appData, vendorUpdatedTrigger }: DashboardPr
             <RefreshCw
               className="w-4 h-4 text-gray-500 hover:text-gray-700 cursor-pointer"
               onClick={fetchDevices}
-              title="Refresh devices"
             />
           </h3>
           <button

@@ -35,7 +35,7 @@ export default function AccountPage() {
   const [error, setError] = useState("")
 
   // Base URL (replace with env later)
-  const API_BASE = process.env.NEXT_PUBLIC_API_BASE || "https://40ed9b23-ce6c-4865-9ea7-673fc391e9ac-00-1earrmirya0dv.picard.replit.dev/api"
+  const API_BASE = process.env.NEXT_PUBLIC_BACKEND_URL
 
   // Fetch account data
   const fetchAccount = async () => {

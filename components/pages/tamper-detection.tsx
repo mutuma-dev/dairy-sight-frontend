@@ -18,8 +18,7 @@ import DeviceDetailModal from "@/components/modals/device-detail-modal"
 import { RefreshCw } from "lucide-react" // using lucide-react for refresh icon
 
 // Backend base URL (move to env later)
-const BACKEND_URL =
-  "https://40ed9b23-ce6c-4865-9ea7-673fc391e9ac-00-1earrmirya0dv.picard.replit.dev/api/devices"
+const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL + "/api/devices"
 
 export default function TamperDetection() {
   const [deviceList, setDeviceList] = useState<Device[]>([])

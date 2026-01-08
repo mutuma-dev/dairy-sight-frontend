@@ -1196,7 +1196,7 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$re
 ;
 ;
 // Backend base URL (replace with env variable later)
-const BACKEND_URL = "https://40ed9b23-ce6c-4865-9ea7-673fc391e9ac-00-1earrmirya0dv.picard.replit.dev";
+const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL;
 function Dashboard({ appData, vendorUpdatedTrigger }) {
     // Modal states
     const [showTransactions, setShowTransactions] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])(false);
@@ -1435,8 +1435,7 @@ function Dashboard({ appData, vendorUpdatedTrigger }) {
                                     "Recent Transactions",
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$refresh$2d$cw$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__RefreshCw$3e$__["RefreshCw"], {
                                         className: "w-4 h-4 text-gray-500 hover:text-gray-700 cursor-pointer",
-                                        onClick: fetchTransactions,
-                                        title: "Refresh transactions"
+                                        onClick: fetchTransactions
                                     }, void 0, false, {
                                         fileName: "[project]/components/pages/dashboard.tsx",
                                         lineNumber: 181,
@@ -1454,7 +1453,7 @@ function Dashboard({ appData, vendorUpdatedTrigger }) {
                                 children: "View All →"
                             }, void 0, false, {
                                 fileName: "[project]/components/pages/dashboard.tsx",
-                                lineNumber: 187,
+                                lineNumber: 186,
                                 columnNumber: 11
                             }, this)
                         ]
@@ -1468,21 +1467,21 @@ function Dashboard({ appData, vendorUpdatedTrigger }) {
                         children: "Loading transactions..."
                     }, void 0, false, {
                         fileName: "[project]/components/pages/dashboard.tsx",
-                        lineNumber: 196,
+                        lineNumber: 195,
                         columnNumber: 11
                     }, this) : transactionError ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
                         className: "text-red-500 text-sm md:text-base",
                         children: transactionError
                     }, void 0, false, {
                         fileName: "[project]/components/pages/dashboard.tsx",
-                        lineNumber: 198,
+                        lineNumber: 197,
                         columnNumber: 11
                     }, this) : transactions.length === 0 ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
                         className: "text-gray-500 text-sm md:text-base",
                         children: "No transactions found"
                     }, void 0, false, {
                         fileName: "[project]/components/pages/dashboard.tsx",
-                        lineNumber: 200,
+                        lineNumber: 199,
                         columnNumber: 11
                     }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                         className: "space-y-2 md:space-y-3",
@@ -1498,7 +1497,7 @@ function Dashboard({ appData, vendorUpdatedTrigger }) {
                                                 children: txn.id
                                             }, void 0, false, {
                                                 fileName: "[project]/components/pages/dashboard.tsx",
-                                                lineNumber: 210,
+                                                lineNumber: 209,
                                                 columnNumber: 19
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -1506,7 +1505,7 @@ function Dashboard({ appData, vendorUpdatedTrigger }) {
                                                 children: txn.deviceName
                                             }, void 0, false, {
                                                 fileName: "[project]/components/pages/dashboard.tsx",
-                                                lineNumber: 211,
+                                                lineNumber: 210,
                                                 columnNumber: 19
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -1522,13 +1521,13 @@ function Dashboard({ appData, vendorUpdatedTrigger }) {
                                                 }).format(new Date(txn.timestamp))
                                             }, void 0, false, {
                                                 fileName: "[project]/components/pages/dashboard.tsx",
-                                                lineNumber: 212,
+                                                lineNumber: 211,
                                                 columnNumber: 19
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/components/pages/dashboard.tsx",
-                                        lineNumber: 209,
+                                        lineNumber: 208,
                                         columnNumber: 17
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -1539,18 +1538,18 @@ function Dashboard({ appData, vendorUpdatedTrigger }) {
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/components/pages/dashboard.tsx",
-                                        lineNumber: 224,
+                                        lineNumber: 223,
                                         columnNumber: 17
                                     }, this)
                                 ]
                             }, txn.id, true, {
                                 fileName: "[project]/components/pages/dashboard.tsx",
-                                lineNumber: 204,
+                                lineNumber: 203,
                                 columnNumber: 15
                             }, this))
                     }, void 0, false, {
                         fileName: "[project]/components/pages/dashboard.tsx",
-                        lineNumber: 202,
+                        lineNumber: 201,
                         columnNumber: 11
                     }, this)
                 ]
@@ -1571,17 +1570,16 @@ function Dashboard({ appData, vendorUpdatedTrigger }) {
                                     "Device Status",
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$refresh$2d$cw$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__RefreshCw$3e$__["RefreshCw"], {
                                         className: "w-4 h-4 text-gray-500 hover:text-gray-700 cursor-pointer",
-                                        onClick: fetchDevices,
-                                        title: "Refresh devices"
+                                        onClick: fetchDevices
                                     }, void 0, false, {
                                         fileName: "[project]/components/pages/dashboard.tsx",
-                                        lineNumber: 236,
+                                        lineNumber: 235,
                                         columnNumber: 13
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/components/pages/dashboard.tsx",
-                                lineNumber: 234,
+                                lineNumber: 233,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -1590,13 +1588,13 @@ function Dashboard({ appData, vendorUpdatedTrigger }) {
                                 children: "View All →"
                             }, void 0, false, {
                                 fileName: "[project]/components/pages/dashboard.tsx",
-                                lineNumber: 242,
+                                lineNumber: 240,
                                 columnNumber: 11
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/components/pages/dashboard.tsx",
-                        lineNumber: 233,
+                        lineNumber: 232,
                         columnNumber: 9
                     }, this),
                     loadingDevices ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -1604,21 +1602,21 @@ function Dashboard({ appData, vendorUpdatedTrigger }) {
                         children: "Loading devices..."
                     }, void 0, false, {
                         fileName: "[project]/components/pages/dashboard.tsx",
-                        lineNumber: 251,
+                        lineNumber: 249,
                         columnNumber: 11
                     }, this) : deviceError ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
                         className: "text-red-500 text-sm md:text-base",
                         children: deviceError
                     }, void 0, false, {
                         fileName: "[project]/components/pages/dashboard.tsx",
-                        lineNumber: 253,
+                        lineNumber: 251,
                         columnNumber: 11
                     }, this) : devices.length === 0 ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
                         className: "text-gray-500 text-sm md:text-base",
                         children: "No devices found"
                     }, void 0, false, {
                         fileName: "[project]/components/pages/dashboard.tsx",
-                        lineNumber: 255,
+                        lineNumber: 253,
                         columnNumber: 11
                     }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                         className: "space-y-2 md:space-y-3",
@@ -1633,12 +1631,12 @@ function Dashboard({ appData, vendorUpdatedTrigger }) {
                                             children: device.id
                                         }, void 0, false, {
                                             fileName: "[project]/components/pages/dashboard.tsx",
-                                            lineNumber: 265,
+                                            lineNumber: 263,
                                             columnNumber: 19
                                         }, this)
                                     }, void 0, false, {
                                         fileName: "[project]/components/pages/dashboard.tsx",
-                                        lineNumber: 264,
+                                        lineNumber: 262,
                                         columnNumber: 17
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1648,7 +1646,7 @@ function Dashboard({ appData, vendorUpdatedTrigger }) {
                                                 className: `inline-block w-3 h-3 rounded-full ${device.status === "online" ? "bg-green-500" : "bg-red-500"}`
                                             }, void 0, false, {
                                                 fileName: "[project]/components/pages/dashboard.tsx",
-                                                lineNumber: 268,
+                                                lineNumber: 266,
                                                 columnNumber: 19
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -1656,30 +1654,30 @@ function Dashboard({ appData, vendorUpdatedTrigger }) {
                                                 children: device.status
                                             }, void 0, false, {
                                                 fileName: "[project]/components/pages/dashboard.tsx",
-                                                lineNumber: 273,
+                                                lineNumber: 271,
                                                 columnNumber: 19
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/components/pages/dashboard.tsx",
-                                        lineNumber: 267,
+                                        lineNumber: 265,
                                         columnNumber: 17
                                     }, this)
                                 ]
                             }, device.id, true, {
                                 fileName: "[project]/components/pages/dashboard.tsx",
-                                lineNumber: 259,
+                                lineNumber: 257,
                                 columnNumber: 15
                             }, this))
                     }, void 0, false, {
                         fileName: "[project]/components/pages/dashboard.tsx",
-                        lineNumber: 257,
+                        lineNumber: 255,
                         columnNumber: 11
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/components/pages/dashboard.tsx",
-                lineNumber: 232,
+                lineNumber: 231,
                 columnNumber: 7
             }, this),
             showTransactions && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$modals$2f$transactions$2d$list$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["default"], {
@@ -1687,7 +1685,7 @@ function Dashboard({ appData, vendorUpdatedTrigger }) {
                 onClose: ()=>setShowTransactions(false)
             }, void 0, false, {
                 fileName: "[project]/components/pages/dashboard.tsx",
-                lineNumber: 283,
+                lineNumber: 281,
                 columnNumber: 9
             }, this),
             showAlerts && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$modals$2f$alerts$2d$list$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["default"], {
@@ -1695,7 +1693,7 @@ function Dashboard({ appData, vendorUpdatedTrigger }) {
                 onClose: ()=>setShowAlerts(false)
             }, void 0, false, {
                 fileName: "[project]/components/pages/dashboard.tsx",
-                lineNumber: 285,
+                lineNumber: 283,
                 columnNumber: 22
             }, this),
             showDeviceStatus && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$modals$2f$device$2d$status$2d$list$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["default"], {
@@ -1703,7 +1701,7 @@ function Dashboard({ appData, vendorUpdatedTrigger }) {
                 onClose: ()=>setShowDeviceStatus(false)
             }, void 0, false, {
                 fileName: "[project]/components/pages/dashboard.tsx",
-                lineNumber: 286,
+                lineNumber: 284,
                 columnNumber: 28
             }, this)
         ]
@@ -1903,7 +1901,7 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$components$2f$modals$2f$devi
 ;
 ;
 // Backend base URL (replace with env variable later)
-const BACKEND_URL = "https://40ed9b23-ce6c-4865-9ea7-673fc391e9ac-00-1earrmirya0dv.picard.replit.dev/api/devices";
+const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL + "/api/devices";
 function AtmDevices() {
     const [deviceList, setDeviceList] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])([]);
     const [selectedDevice, setSelectedDevice] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])(null);
@@ -2001,7 +1999,7 @@ function AtmDevices() {
                 children: notification.message
             }, void 0, false, {
                 fileName: "[project]/components/pages/atm-devices.tsx",
-                lineNumber: 110,
+                lineNumber: 109,
                 columnNumber: 9
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2014,7 +2012,7 @@ function AtmDevices() {
                                 children: "ATM Devices"
                             }, void 0, false, {
                                 fileName: "[project]/components/pages/atm-devices.tsx",
-                                lineNumber: 122,
+                                lineNumber: 121,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -2022,13 +2020,13 @@ function AtmDevices() {
                                 children: "Manage and monitor all milk vending ATM devices"
                             }, void 0, false, {
                                 fileName: "[project]/components/pages/atm-devices.tsx",
-                                lineNumber: 123,
+                                lineNumber: 122,
                                 columnNumber: 11
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/components/pages/atm-devices.tsx",
-                        lineNumber: 121,
+                        lineNumber: 120,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -2037,13 +2035,13 @@ function AtmDevices() {
                         children: "+ Add Device"
                     }, void 0, false, {
                         fileName: "[project]/components/pages/atm-devices.tsx",
-                        lineNumber: 128,
+                        lineNumber: 127,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/components/pages/atm-devices.tsx",
-                lineNumber: 120,
+                lineNumber: 119,
                 columnNumber: 7
             }, this),
             loading && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2053,7 +2051,7 @@ function AtmDevices() {
                         className: "w-10 h-10 border-4 border-blue-600 border-dashed rounded-full animate-spin"
                     }, void 0, false, {
                         fileName: "[project]/components/pages/atm-devices.tsx",
-                        lineNumber: 139,
+                        lineNumber: 138,
                         columnNumber: 11
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -2061,13 +2059,13 @@ function AtmDevices() {
                         children: "Loading devices..."
                     }, void 0, false, {
                         fileName: "[project]/components/pages/atm-devices.tsx",
-                        lineNumber: 140,
+                        lineNumber: 139,
                         columnNumber: 11
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/components/pages/atm-devices.tsx",
-                lineNumber: 138,
+                lineNumber: 137,
                 columnNumber: 9
             }, this),
             !loading && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2083,12 +2081,12 @@ function AtmDevices() {
                                     children: device.id
                                 }, void 0, false, {
                                     fileName: "[project]/components/pages/atm-devices.tsx",
-                                    lineNumber: 154,
+                                    lineNumber: 153,
                                     columnNumber: 17
                                 }, this)
                             }, void 0, false, {
                                 fileName: "[project]/components/pages/atm-devices.tsx",
-                                lineNumber: 153,
+                                lineNumber: 152,
                                 columnNumber: 15
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2102,7 +2100,7 @@ function AtmDevices() {
                                                 children: "Device Status"
                                             }, void 0, false, {
                                                 fileName: "[project]/components/pages/atm-devices.tsx",
-                                                lineNumber: 158,
+                                                lineNumber: 157,
                                                 columnNumber: 19
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2112,7 +2110,7 @@ function AtmDevices() {
                                                         className: `inline-block w-3 h-3 rounded-full ${device.status === "online" ? "bg-green-500" : "bg-red-500"}`
                                                     }, void 0, false, {
                                                         fileName: "[project]/components/pages/atm-devices.tsx",
-                                                        lineNumber: 160,
+                                                        lineNumber: 159,
                                                         columnNumber: 21
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -2120,19 +2118,19 @@ function AtmDevices() {
                                                         children: device.status
                                                     }, void 0, false, {
                                                         fileName: "[project]/components/pages/atm-devices.tsx",
-                                                        lineNumber: 165,
+                                                        lineNumber: 164,
                                                         columnNumber: 21
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/components/pages/atm-devices.tsx",
-                                                lineNumber: 159,
+                                                lineNumber: 158,
                                                 columnNumber: 19
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/components/pages/atm-devices.tsx",
-                                        lineNumber: 157,
+                                        lineNumber: 156,
                                         columnNumber: 17
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2142,29 +2140,29 @@ function AtmDevices() {
                                             children: "Click to view full details →"
                                         }, void 0, false, {
                                             fileName: "[project]/components/pages/atm-devices.tsx",
-                                            lineNumber: 169,
+                                            lineNumber: 168,
                                             columnNumber: 19
                                         }, this)
                                     }, void 0, false, {
                                         fileName: "[project]/components/pages/atm-devices.tsx",
-                                        lineNumber: 168,
+                                        lineNumber: 167,
                                         columnNumber: 17
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/components/pages/atm-devices.tsx",
-                                lineNumber: 156,
+                                lineNumber: 155,
                                 columnNumber: 15
                             }, this)
                         ]
                     }, device.id, true, {
                         fileName: "[project]/components/pages/atm-devices.tsx",
-                        lineNumber: 148,
+                        lineNumber: 147,
                         columnNumber: 13
                     }, this))
             }, void 0, false, {
                 fileName: "[project]/components/pages/atm-devices.tsx",
-                lineNumber: 146,
+                lineNumber: 145,
                 columnNumber: 9
             }, this),
             selectedDevice && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$modals$2f$device$2d$detail$2d$modal$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["default"], {
@@ -2172,7 +2170,7 @@ function AtmDevices() {
                 onClose: ()=>setSelectedDevice(null)
             }, void 0, false, {
                 fileName: "[project]/components/pages/atm-devices.tsx",
-                lineNumber: 178,
+                lineNumber: 177,
                 columnNumber: 26
             }, this),
             showAddModal && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2185,7 +2183,7 @@ function AtmDevices() {
                             children: "Add New Device"
                         }, void 0, false, {
                             fileName: "[project]/components/pages/atm-devices.tsx",
-                            lineNumber: 184,
+                            lineNumber: 183,
                             columnNumber: 13
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2196,7 +2194,7 @@ function AtmDevices() {
                                     children: "Device ID"
                                 }, void 0, false, {
                                     fileName: "[project]/components/pages/atm-devices.tsx",
-                                    lineNumber: 186,
+                                    lineNumber: 185,
                                     columnNumber: 15
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
@@ -2206,13 +2204,13 @@ function AtmDevices() {
                                     className: "border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
                                 }, void 0, false, {
                                     fileName: "[project]/components/pages/atm-devices.tsx",
-                                    lineNumber: 187,
+                                    lineNumber: 186,
                                     columnNumber: 15
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/components/pages/atm-devices.tsx",
-                            lineNumber: 185,
+                            lineNumber: 184,
                             columnNumber: 13
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2223,7 +2221,7 @@ function AtmDevices() {
                                     children: "Device Name"
                                 }, void 0, false, {
                                     fileName: "[project]/components/pages/atm-devices.tsx",
-                                    lineNumber: 195,
+                                    lineNumber: 194,
                                     columnNumber: 15
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
@@ -2233,13 +2231,13 @@ function AtmDevices() {
                                     className: "border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
                                 }, void 0, false, {
                                     fileName: "[project]/components/pages/atm-devices.tsx",
-                                    lineNumber: 196,
+                                    lineNumber: 195,
                                     columnNumber: 15
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/components/pages/atm-devices.tsx",
-                            lineNumber: 194,
+                            lineNumber: 193,
                             columnNumber: 13
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2250,7 +2248,7 @@ function AtmDevices() {
                                     children: "Status:"
                                 }, void 0, false, {
                                     fileName: "[project]/components/pages/atm-devices.tsx",
-                                    lineNumber: 204,
+                                    lineNumber: 203,
                                     columnNumber: 15
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2263,7 +2261,7 @@ function AtmDevices() {
                                             className: "w-4 h-4 accent-blue-600"
                                         }, void 0, false, {
                                             fileName: "[project]/components/pages/atm-devices.tsx",
-                                            lineNumber: 206,
+                                            lineNumber: 205,
                                             columnNumber: 17
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -2271,19 +2269,19 @@ function AtmDevices() {
                                             children: "Online"
                                         }, void 0, false, {
                                             fileName: "[project]/components/pages/atm-devices.tsx",
-                                            lineNumber: 212,
+                                            lineNumber: 211,
                                             columnNumber: 17
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/components/pages/atm-devices.tsx",
-                                    lineNumber: 205,
+                                    lineNumber: 204,
                                     columnNumber: 15
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/components/pages/atm-devices.tsx",
-                            lineNumber: 203,
+                            lineNumber: 202,
                             columnNumber: 13
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2295,7 +2293,7 @@ function AtmDevices() {
                                     children: "Cancel"
                                 }, void 0, false, {
                                     fileName: "[project]/components/pages/atm-devices.tsx",
-                                    lineNumber: 216,
+                                    lineNumber: 215,
                                     columnNumber: 15
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -2304,30 +2302,30 @@ function AtmDevices() {
                                     children: "Save"
                                 }, void 0, false, {
                                     fileName: "[project]/components/pages/atm-devices.tsx",
-                                    lineNumber: 222,
+                                    lineNumber: 221,
                                     columnNumber: 15
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/components/pages/atm-devices.tsx",
-                            lineNumber: 215,
+                            lineNumber: 214,
                             columnNumber: 13
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/components/pages/atm-devices.tsx",
-                    lineNumber: 183,
+                    lineNumber: 182,
                     columnNumber: 11
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/components/pages/atm-devices.tsx",
-                lineNumber: 182,
+                lineNumber: 181,
                 columnNumber: 9
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/components/pages/atm-devices.tsx",
-        lineNumber: 107,
+        lineNumber: 106,
         columnNumber: 5
     }, this);
 }
@@ -2359,7 +2357,7 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$re
 ;
 ;
 // Backend base URL (move to env later)
-const BACKEND_URL = "https://40ed9b23-ce6c-4865-9ea7-673fc391e9ac-00-1earrmirya0dv.picard.replit.dev/api/devices";
+const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL + "/api/devices";
 function TamperDetection() {
     const [deviceList, setDeviceList] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])([]);
     const [selectedDevice, setSelectedDevice] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])(null);
@@ -2411,7 +2409,7 @@ function TamperDetection() {
                 children: notification.message
             }, void 0, false, {
                 fileName: "[project]/components/pages/tamper-detection.tsx",
-                lineNumber: 76,
+                lineNumber: 75,
                 columnNumber: 9
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2424,7 +2422,7 @@ function TamperDetection() {
                                 children: "Tamper Detection"
                             }, void 0, false, {
                                 fileName: "[project]/components/pages/tamper-detection.tsx",
-                                lineNumber: 88,
+                                lineNumber: 87,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -2432,13 +2430,13 @@ function TamperDetection() {
                                 children: "Monitor devices flagged for tampering"
                             }, void 0, false, {
                                 fileName: "[project]/components/pages/tamper-detection.tsx",
-                                lineNumber: 89,
+                                lineNumber: 88,
                                 columnNumber: 11
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/components/pages/tamper-detection.tsx",
-                        lineNumber: 87,
+                        lineNumber: 86,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2451,7 +2449,7 @@ function TamperDetection() {
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/components/pages/tamper-detection.tsx",
-                                lineNumber: 94,
+                                lineNumber: 93,
                                 columnNumber: 29
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -2462,24 +2460,24 @@ function TamperDetection() {
                                     className: "w-4 h-4 md:w-5 md:h-5"
                                 }, void 0, false, {
                                     fileName: "[project]/components/pages/tamper-detection.tsx",
-                                    lineNumber: 100,
+                                    lineNumber: 99,
                                     columnNumber: 13
                                 }, this)
                             }, void 0, false, {
                                 fileName: "[project]/components/pages/tamper-detection.tsx",
-                                lineNumber: 95,
+                                lineNumber: 94,
                                 columnNumber: 11
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/components/pages/tamper-detection.tsx",
-                        lineNumber: 93,
+                        lineNumber: 92,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/components/pages/tamper-detection.tsx",
-                lineNumber: 86,
+                lineNumber: 85,
                 columnNumber: 7
             }, this),
             tamperedDevices.length > 0 && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2492,12 +2490,12 @@ function TamperDetection() {
                     ]
                 }, void 0, true, {
                     fileName: "[project]/components/pages/tamper-detection.tsx",
-                    lineNumber: 108,
+                    lineNumber: 107,
                     columnNumber: 11
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/components/pages/tamper-detection.tsx",
-                lineNumber: 107,
+                lineNumber: 106,
                 columnNumber: 9
             }, this),
             loading && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2507,7 +2505,7 @@ function TamperDetection() {
                         className: "w-10 h-10 border-4 border-red-600 border-dashed rounded-full animate-spin"
                     }, void 0, false, {
                         fileName: "[project]/components/pages/tamper-detection.tsx",
-                        lineNumber: 115,
+                        lineNumber: 114,
                         columnNumber: 11
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -2515,13 +2513,13 @@ function TamperDetection() {
                         children: "Loading devices..."
                     }, void 0, false, {
                         fileName: "[project]/components/pages/tamper-detection.tsx",
-                        lineNumber: 116,
+                        lineNumber: 115,
                         columnNumber: 11
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/components/pages/tamper-detection.tsx",
-                lineNumber: 114,
+                lineNumber: 113,
                 columnNumber: 9
             }, this),
             !loading && (tamperedDevices.length > 0 ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2537,12 +2535,12 @@ function TamperDetection() {
                                     children: device.id
                                 }, void 0, false, {
                                     fileName: "[project]/components/pages/tamper-detection.tsx",
-                                    lineNumber: 131,
+                                    lineNumber: 130,
                                     columnNumber: 17
                                 }, this)
                             }, void 0, false, {
                                 fileName: "[project]/components/pages/tamper-detection.tsx",
-                                lineNumber: 130,
+                                lineNumber: 129,
                                 columnNumber: 15
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2556,7 +2554,7 @@ function TamperDetection() {
                                                 children: "Device Status"
                                             }, void 0, false, {
                                                 fileName: "[project]/components/pages/tamper-detection.tsx",
-                                                lineNumber: 137,
+                                                lineNumber: 136,
                                                 columnNumber: 19
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2566,7 +2564,7 @@ function TamperDetection() {
                                                         className: `inline-block w-3 h-3 rounded-full ${device.status === "online" ? "bg-green-500" : "bg-red-500"}`
                                                     }, void 0, false, {
                                                         fileName: "[project]/components/pages/tamper-detection.tsx",
-                                                        lineNumber: 139,
+                                                        lineNumber: 138,
                                                         columnNumber: 21
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -2574,19 +2572,19 @@ function TamperDetection() {
                                                         children: device.status
                                                     }, void 0, false, {
                                                         fileName: "[project]/components/pages/tamper-detection.tsx",
-                                                        lineNumber: 144,
+                                                        lineNumber: 143,
                                                         columnNumber: 21
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/components/pages/tamper-detection.tsx",
-                                                lineNumber: 138,
+                                                lineNumber: 137,
                                                 columnNumber: 19
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/components/pages/tamper-detection.tsx",
-                                        lineNumber: 136,
+                                        lineNumber: 135,
                                         columnNumber: 17
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2596,29 +2594,29 @@ function TamperDetection() {
                                             children: "Click to view full details →"
                                         }, void 0, false, {
                                             fileName: "[project]/components/pages/tamper-detection.tsx",
-                                            lineNumber: 148,
+                                            lineNumber: 147,
                                             columnNumber: 19
                                         }, this)
                                     }, void 0, false, {
                                         fileName: "[project]/components/pages/tamper-detection.tsx",
-                                        lineNumber: 147,
+                                        lineNumber: 146,
                                         columnNumber: 17
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/components/pages/tamper-detection.tsx",
-                                lineNumber: 135,
+                                lineNumber: 134,
                                 columnNumber: 15
                             }, this)
                         ]
                     }, device.id, true, {
                         fileName: "[project]/components/pages/tamper-detection.tsx",
-                        lineNumber: 124,
+                        lineNumber: 123,
                         columnNumber: 13
                     }, this))
             }, void 0, false, {
                 fileName: "[project]/components/pages/tamper-detection.tsx",
-                lineNumber: 122,
+                lineNumber: 121,
                 columnNumber: 9
             }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                 className: "text-center py-12",
@@ -2627,12 +2625,12 @@ function TamperDetection() {
                     children: "No tampered devices detected"
                 }, void 0, false, {
                     fileName: "[project]/components/pages/tamper-detection.tsx",
-                    lineNumber: 156,
+                    lineNumber: 155,
                     columnNumber: 11
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/components/pages/tamper-detection.tsx",
-                lineNumber: 155,
+                lineNumber: 154,
                 columnNumber: 9
             }, this)),
             selectedDevice && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$modals$2f$device$2d$detail$2d$modal$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["default"], {
@@ -2640,13 +2638,13 @@ function TamperDetection() {
                 onClose: ()=>setSelectedDevice(null)
             }, void 0, false, {
                 fileName: "[project]/components/pages/tamper-detection.tsx",
-                lineNumber: 161,
+                lineNumber: 160,
                 columnNumber: 26
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/components/pages/tamper-detection.tsx",
-        lineNumber: 73,
+        lineNumber: 72,
         columnNumber: 5
     }, this);
 }
@@ -3092,8 +3090,7 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$card$2e$
 ;
 ;
 ;
-const BACKEND_URL = "https://40ed9b23-ce6c-4865-9ea7-673fc391e9ac-00-1earrmirya0dv.picard.replit.dev" // move to env later
-;
+const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL;
 function Price() {
     const [pricing, setPricing] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])({
         pricePerLitre: 0
@@ -3468,7 +3465,7 @@ function AccountPage() {
     const [withdrawAmount, setWithdrawAmount] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])("");
     const [error, setError] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])("");
     // Base URL (replace with env later)
-    const API_BASE = process.env.NEXT_PUBLIC_API_BASE || "https://40ed9b23-ce6c-4865-9ea7-673fc391e9ac-00-1earrmirya0dv.picard.replit.dev/api";
+    const API_BASE = process.env.NEXT_PUBLIC_BACKEND_URL;
     // Fetch account data
     const fetchAccount = async ()=>{
         try {

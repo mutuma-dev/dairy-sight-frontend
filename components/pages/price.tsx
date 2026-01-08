@@ -13,7 +13,7 @@ import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import type { Pricing } from "@/lib/types"
 
-const BACKEND_URL = "https://40ed9b23-ce6c-4865-9ea7-673fc391e9ac-00-1earrmirya0dv.picard.replit.dev" // move to env later
+const BACKEND_URL =  process.env.NEXT_PUBLIC_BACKEND_URL
 
 export default function Price() {
   const [pricing, setPricing] = useState<Pricing>({ pricePerLitre: 0 })
