@@ -123,16 +123,16 @@
   ],
   "analytics": {
     "totalLitres": {
-      "last24Hours": 836,
-      "last7Days": 3867,
-      "last30Days": 16667,
-      "last1Year": 105333
+      "last24Hours": 236,
+      "last7Days": 867,
+      "last30Days": 1667,
+      "last1Year": 54333
     },
     "peakHours": {
       "last24Hours": { "hour": "7 PM - 8 PM", "litres": 160 },
       "last7Days": { "hour": "6 PM - 7 PM", "litres": 1000 },
       "last30Days": { "hour": "6 PM - 7 PM", "litres": 3667 },
-      "last1Year": { "hour": "10 PM - 11 PM", "litres": 16667 }
+      "last1Year": { "hour": "10 PM - 11 PM", "litres": 8667 }
     }
   }
 }
