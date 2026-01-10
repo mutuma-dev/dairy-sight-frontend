@@ -9,6 +9,15 @@
 
 import { useState } from "react"
 import type { Analytics, TimePeriod } from "@/lib/types"
+import {
+  ResponsiveContainer,
+  LineChart,
+  Line,
+  XAxis,
+  YAxis,
+  Tooltip,
+  CartesianGrid,
+} from "recharts"
 
 interface SalesAnalyticsProps {
   analytics: Analytics
@@ -17,7 +26,6 @@ interface SalesAnalyticsProps {
 export default function SalesAnalytics({ analytics }: SalesAnalyticsProps) {
   const [timePeriod, setTimePeriod] = useState<TimePeriod>("last7Days")
 
-  // Time period options
   const timePeriods: { value: TimePeriod; label: string }[] = [
     { value: "last24Hours", label: "Last 24 Hours" },
     { value: "last7Days", label: "Last 7 Days" },
@@ -25,27 +33,28 @@ export default function SalesAnalytics({ analytics }: SalesAnalyticsProps) {
     { value: "last1Year", label: "Last 1 Year" },
   ]
 
-  // 🔐 Safety guard (prevents crashes if data is missing)
   if (!analytics) {
     return <div className="p-6">Loading analytics...</div>
   }
 
-  // ✅ Correct paths based on your data file
   const totalLitres = analytics.totalLitres[timePeriod]
   const peakHour = analytics.peakHours[timePeriod]
 
+  // 📊 Line graph data (dynamic & filter-aware)
+  const chartData = analytics.salesTrend[timePeriod]
+
   return (
-    <div className="p-6">
+    <div className="p-6 space-y-10">
       {/* Header */}
-      <div className="mb-6">
+      <div>
         <h1 className="text-3xl font-bold text-gray-800">Sales Analytics</h1>
         <p className="text-gray-600 mt-2">
           Track sales performance and peak hours
         </p>
       </div>
 
-      {/* Time Period Filter */}
-      <div className="mb-6 flex gap-3 flex-wrap">
+      {/* Filters */}
+      <div className="flex gap-3 flex-wrap">
         {timePeriods.map((period) => (
           <button
             key={period.value}
@@ -61,38 +70,18 @@ export default function SalesAnalytics({ analytics }: SalesAnalyticsProps) {
         ))}
       </div>
 
-      {/* Analytics Cards */}
+      {/* Cards */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* Total Sales Card */}
         <div className="bg-white rounded-lg shadow-md p-8">
-          <div className="flex items-start justify-between mb-6">
-            <div>
-              <p className="text-gray-600 font-medium text-sm">Total Sales</p>
-              <h2 className="text-gray-800 text-xs mt-1">
-                {timePeriods.find((p) => p.value === timePeriod)?.label}
-              </h2>
-            </div>
-            {/*  <div className="text-4xl">💰</div> */}
-          </div>
-
-          <h3 className="text-5xl font-bold text-blue-600">
+          <p className="text-gray-600 text-sm">Total Sales</p>
+          <h3 className="text-5xl font-bold text-blue-600 mt-4">
             {totalLitres.toLocaleString()} Litres
           </h3>
         </div>
 
-        {/* Peak Hour Card */}
         <div className="bg-white rounded-lg shadow-md p-8">
-          <div className="flex items-start justify-between mb-6">
-            <div>
-              <p className="text-gray-600 font-medium text-sm">Peak Hour</p>
-              <h2 className="text-gray-800 text-xs mt-1">
-                {timePeriods.find((p) => p.value === timePeriod)?.label}
-              </h2>
-            </div>
-            {/* <div className="text-4xl">📈</div> */}
-          </div>
-
-          <h3 className="text-4xl font-bold text-blue-600">
+          <p className="text-gray-600 text-sm">Peak Hour</p>
+          <h3 className="text-4xl font-bold text-blue-600 mt-4">
             {peakHour.hour}
           </h3>
           <p className="text-gray-600 text-sm mt-2">
@@ -100,7 +89,48 @@ export default function SalesAnalytics({ analytics }: SalesAnalyticsProps) {
           </p>
         </div>
       </div>
+
+      {/* 📈 Animated Sales Trend Graph */}
+      <div className="bg-white rounded-xl shadow-md p-6">
+        <h2 className="text-lg font-semibold text-gray-800 mb-4">
+          Sales Trend ({timePeriods.find(p => p.value === timePeriod)?.label})
+        </h2>
+
+        <div className="w-full h-[260px] sm:h-[300px]">
+          <ResponsiveContainer width="100%" height="100%">
+            <LineChart data={chartData}>
+              <CartesianGrid strokeDasharray="3 3" stroke="#E5E7EB" />
+              <XAxis
+                dataKey="label"
+                tick={{ fontSize: 12 }}
+                stroke="#9CA3AF"
+              />
+              <YAxis
+                tick={{ fontSize: 12 }}
+                stroke="#9CA3AF"
+              />
+              <Tooltip
+                contentStyle={{
+                  backgroundColor: "#fff",
+                  borderRadius: "8px",
+                  border: "1px solid #E5E7EB",
+                }}
+              />
+              <Line
+                type="monotone"
+                dataKey="litres"
+                stroke="#2563EB"
+                strokeWidth={3}
+                dot={{ r: 4 }}
+                activeDot={{ r: 6 }}
+                animationDuration={700}
+              />
+            </LineChart>
+          </ResponsiveContainer>
+        </div>
+      </div>
     </div>
   )
 }
+
 
