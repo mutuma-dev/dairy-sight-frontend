@@ -1,138 +1,16 @@
 {
-  "vendor": {
-    "name": "Mugambi",
-    "shopName": "Mugambi's Milk Shop",
-    "id": "VENDOR_00673773"
-  },
-  "pricing": {
-    "pricePerLitre": 60
-  },
-  "account": {
-    "balance": 60400,
-    "withdrawals": [
-      {
-        "id": "WD_001",
-        "amount": 50000,
-        "timestamp": "2025-12-08T10:30:00Z"
-      },
-      {
-        "id": "WD_002",
-        "amount": 75000,
-        "timestamp": "2025-12-07T14:15:00Z"
-      },
-      {
-        "id": "WD_003",
-        "amount": 30000,
-        "timestamp": "2025-12-06T09:45:00Z"
-      }
-    ]
-  },
-  "devices": [
-    {
-      "id": "ATM-001",
-      "name": "NYERI DEVICE 1",
-      "status": "online",
-      "isTampered": false,
-      "lastUpdated": "2025-12-09T15:30:00Z"
-    },
-    {
-      "id": "ATM-002",
-      "name": "NYERI DEVICE 2",
-      "status": "online",
-      "isTampered": false,
-      "lastUpdated": "2025-12-09T15:25:00Z"
-    },
-    {
-      "id": "ATM-003",
-      "name": "MERU DEVICE 1",
-      "status": "offline",
-      "isTampered": false,
-      "lastUpdated": "2025-12-09T15:00:00Z"
-    },
-    {
-      "id": "ATM-004",
-      "name": "MERU DEVICE 2",
-      "status": "online",
-      "isTampered": true,
-      "lastUpdated": "2025-12-09T14:50:00Z"
-    },
-    {
-      "id": "ATM-005",
-      "name": "NGONG DEVICE 1",
-      "status": "offline",
-      "isTampered": true,
-      "lastUpdated": "2025-12-09T14:30:00Z"
-    }
-  ],
-  "transactions": [
-    {
-      "id": "TXN_1001",
-      "deviceId": "ATM-001",
-      "deviceName": "NYERI DEVICE 1",
-      "amount": 120,
-      "currency": "KES",
-      "timestamp": "2025-12-09T14:30:00Z",
-      "type": "mpesa",
-      "mpesaNumber": "+254712345678",
-      "mpesaCode": "JZK4NE3NC"
-    },
-    {
-      "id": "TXN_1002",
-      "deviceId": "ATM-002",
-      "deviceName": "NYERI DEVICE 2",
-      "amount": 60,
-      "currency": "KES",
-      "timestamp": "2025-12-09T13:45:00Z",
-      "type": "mpesa",
-      "mpesaNumber": "+254798765432",
-      "mpesaCode": "XYZ9ABC1L"
-    },
-    {
-      "id": "TXN_1003",
-      "deviceId": "ATM-004",
-      "deviceName": "MERU DEVICE 2",
-      "amount": 60,
-      "currency": "KES",
-      "timestamp": "2025-12-09T12:15:00Z",
-      "type": "mpesa",
-      "mpesaNumber": "+254723456789",
-      "mpesaCode": "DEF2GHI8M"
-    }
-  ],
-  "alerts": [
-    {
-      "id": "ALERT_001",
-      "deviceId": "ATM-003",
-      "deviceName": "MERU DEVICE 1",
-      "status": "offline",
-      "type": "offline",
-      "severity": "critical",
-      "timestamp": "2025-12-09T15:00:00Z",
-      "resolved": false
-    },
-    {
-      "id": "ALERT_002",
-      "deviceId": "ATM-005",
-      "deviceName": "NGONG DEVICE 1",
-      "status": "offline",
-      "type": "offline",
-      "severity": "critical",
-      "timestamp": "2025-12-09T14:30:00Z",
-      "resolved": false
-    }
-  ],
   "analytics": {
     "totalLitres": {
       "last24Hours": 836,
       "last7Days": 3867,
-      "last30Days": 16667,
-      "last1Year": 105333
+      "last30Days": 7667,
+      "last1Year": 10333
     },
     "peakHours": {
-      "last24Hours": { "hour": "7 PM - 8 PM", "litres": 160 },
-      "last7Days": { "hour": "6 PM - 7 PM", "litres": 1000 },
-      "last30Days": { "hour": "6 PM - 7 PM", "litres": 3667 },
-      "last1Year": { "hour": "10 PM - 11 PM", "litres": 16667 }
+      "last24Hours": { "hour": "7 PM - 8 PM", "litres": 560 },
+      "last7Days": { "hour": "6 PM - 7 PM", "litres": 1300 },
+      "last30Days": { "hour": "6 PM - 7 PM", "litres": 3400 },
+      "last1Year": { "hour": "10 PM - 11 PM", "litres": 7800 }
     }
   }
 }
