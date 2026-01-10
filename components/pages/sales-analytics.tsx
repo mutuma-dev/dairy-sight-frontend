@@ -1,104 +1,155 @@
-/**
- * Sales Analytics Page Component
- * Displays Total Sales (Litres) and Peak Hour cards with time period filters
- * Users can filter data by: last 24 hours, last 7 days, last 30 days, last 1 year
- * Data is read directly from app data file (analytics.totalLitres & analytics.peakHours)
- */
-
 "use client"
 
 import { useState } from "react"
-import type { Analytics, TimePeriod } from "@/lib/types"
 import {
-  ResponsiveContainer,
   LineChart,
   Line,
   XAxis,
   YAxis,
   Tooltip,
   CartesianGrid,
+  ResponsiveContainer,
 } from "recharts"
 
-interface SalesAnalyticsProps {
-  analytics: Analytics
+/* ----------------------------------
+   MOCK DATA (SELF-CONTAINED)
+-----------------------------------*/
+
+type TimePeriod = "last24Hours" | "last7Days" | "last30Days" | "last1Year"
+
+const DATA = {
+  last24Hours: {
+    totalLitres: 420,
+    peakHour: { hour: "08:00 - 09:00", litres: 120 },
+    trend: [
+      { label: "00:00", litres: 12 },
+      { label: "03:00", litres: 30 },
+      { label: "06:00", litres: 58 },
+      { label: "09:00", litres: 92 },
+      { label: "12:00", litres: 76 },
+      { label: "15:00", litres: 64 },
+      { label: "18:00", litres: 81 },
+      { label: "21:00", litres: 55 },
+    ],
+  },
+
+  last7Days: {
+    totalLitres: 2840,
+    peakHour: { hour: "07:00 - 08:00", litres: 480 },
+    trend: [
+      { label: "Mon", litres: 410 },
+      { label: "Tue", litres: 380 },
+      { label: "Wed", litres: 460 },
+      { label: "Thu", litres: 520 },
+      { label: "Fri", litres: 610 },
+      { label: "Sat", litres: 730 },
+      { label: "Sun", litres: 690 },
+    ],
+  },
+
+  last30Days: {
+    totalLitres: 11800,
+    peakHour: { hour: "06:00 - 07:00", litres: 1600 },
+    trend: [
+      { label: "Week 1", litres: 2800 },
+      { label: "Week 2", litres: 3100 },
+      { label: "Week 3", litres: 2900 },
+      { label: "Week 4", litres: 3000 },
+    ],
+  },
+
+  last1Year: {
+    totalLitres: 142000,
+    peakHour: { hour: "06:00 - 07:00", litres: 19000 },
+    trend: [
+      { label: "Jan", litres: 11000 },
+      { label: "Feb", litres: 9800 },
+      { label: "Mar", litres: 12300 },
+      { label: "Apr", litres: 11800 },
+      { label: "May", litres: 12900 },
+      { label: "Jun", litres: 13200 },
+      { label: "Jul", litres: 14100 },
+      { label: "Aug", litres: 13600 },
+      { label: "Sep", litres: 12400 },
+      { label: "Oct", litres: 13000 },
+      { label: "Nov", litres: 11900 },
+      { label: "Dec", litres: 12200 },
+    ],
+  },
 }
 
-export default function SalesAnalytics({ analytics }: SalesAnalyticsProps) {
+/* ----------------------------------
+   COMPONENT
+-----------------------------------*/
+
+export default function SalesAnalytics() {
   const [timePeriod, setTimePeriod] = useState<TimePeriod>("last7Days")
 
-  const timePeriods: { value: TimePeriod; label: string }[] = [
+  const filters: { value: TimePeriod; label: string }[] = [
     { value: "last24Hours", label: "Last 24 Hours" },
     { value: "last7Days", label: "Last 7 Days" },
     { value: "last30Days", label: "Last 30 Days" },
     { value: "last1Year", label: "Last 1 Year" },
   ]
 
-  if (!analytics) {
-    return <div className="p-6">Loading analytics...</div>
-  }
-
-  const totalLitres = analytics.totalLitres[timePeriod]
-  const peakHour = analytics.peakHours[timePeriod]
-
-  // 📊 Line graph data (dynamic & filter-aware)
-  const chartData = analytics.salesTrend[timePeriod]
+  const activeData = DATA[timePeriod]
 
   return (
-    <div className="p-6 space-y-10">
+    <div className="p-4 sm:p-6 space-y-8 max-w-6xl mx-auto">
       {/* Header */}
       <div>
         <h1 className="text-3xl font-bold text-gray-800">Sales Analytics</h1>
         <p className="text-gray-600 mt-2">
-          Track sales performance and peak hours
+          Milk vending machine performance overview
         </p>
       </div>
 
       {/* Filters */}
-      <div className="flex gap-3 flex-wrap">
-        {timePeriods.map((period) => (
+      <div className="flex flex-wrap gap-3">
+        {filters.map((filter) => (
           <button
-            key={period.value}
-            onClick={() => setTimePeriod(period.value)}
-            className={`px-4 py-2 rounded-lg font-medium transition-all ${
-              timePeriod === period.value
+            key={filter.value}
+            onClick={() => setTimePeriod(filter.value)}
+            className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
+              timePeriod === filter.value
                 ? "bg-blue-600 text-white shadow-md"
-                : "bg-white text-gray-700 border border-gray-300 hover:bg-gray-50"
+                : "bg-white border border-gray-300 text-gray-700 hover:bg-gray-50"
             }`}
           >
-            {period.label}
+            {filter.label}
           </button>
         ))}
       </div>
 
       {/* Cards */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <div className="bg-white rounded-lg shadow-md p-8">
-          <p className="text-gray-600 text-sm">Total Sales</p>
-          <h3 className="text-5xl font-bold text-blue-600 mt-4">
-            {totalLitres.toLocaleString()} Litres
-          </h3>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="bg-white rounded-xl shadow p-6">
+          <p className="text-sm text-gray-500">Total Sales</p>
+          <h2 className="text-4xl font-bold text-blue-600 mt-4">
+            {activeData.totalLitres.toLocaleString()} L
+          </h2>
         </div>
 
-        <div className="bg-white rounded-lg shadow-md p-8">
-          <p className="text-gray-600 text-sm">Peak Hour</p>
-          <h3 className="text-4xl font-bold text-blue-600 mt-4">
-            {peakHour.hour}
-          </h3>
-          <p className="text-gray-600 text-sm mt-2">
-            {peakHour.litres.toLocaleString()} litres sold
+        <div className="bg-white rounded-xl shadow p-6">
+          <p className="text-sm text-gray-500">Peak Hour</p>
+          <h2 className="text-3xl font-bold text-blue-600 mt-4">
+            {activeData.peakHour.hour}
+          </h2>
+          <p className="text-sm text-gray-600 mt-2">
+            {activeData.peakHour.litres.toLocaleString()} litres sold
           </p>
         </div>
       </div>
 
-      {/* 📈 Animated Sales Trend Graph */}
-      <div className="bg-white rounded-xl shadow-md p-6">
-        <h2 className="text-lg font-semibold text-gray-800 mb-4">
-          Sales Trend ({timePeriods.find(p => p.value === timePeriod)?.label})
-        </h2>
+      {/* Animated Graph */}
+      <div className="bg-white rounded-xl shadow p-6">
+        <h3 className="text-lg font-semibold text-gray-800 mb-4">
+          Sales Trend
+        </h3>
 
-        <div className="w-full h-[260px] sm:h-[300px]">
+        <div className="w-full h-[260px] sm:h-[320px]">
           <ResponsiveContainer width="100%" height="100%">
-            <LineChart data={chartData}>
+            <LineChart data={activeData.trend}>
               <CartesianGrid strokeDasharray="3 3" stroke="#E5E7EB" />
               <XAxis
                 dataKey="label"
@@ -132,5 +183,3 @@ export default function SalesAnalytics({ analytics }: SalesAnalyticsProps) {
     </div>
   )
 }
-
-
