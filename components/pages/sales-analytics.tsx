@@ -19,7 +19,7 @@ import {
 type TimePeriod = "last24Hours" | "last7Days" | "last30Days" | "last1Year"
 
 /* ----------------------------------
-   MOCK DATA (UPDATED FORMAT)
+   MOCK DATA
 -----------------------------------*/
 const DATA: Record<
   TimePeriod,
@@ -183,14 +183,14 @@ export default function SalesAnalytics() {
         <div className="bg-white rounded-xl shadow p-6">
           <p className="text-sm text-gray-500">Total Sales</p>
           <h2 className="text-4xl font-bold text-blue-600 mt-3">
-            {active.totalLitres.toLocaleString()} L
+            KES {active.totalLitres.toLocaleString()}
           </h2>
         </div>
 
         <div className="bg-white rounded-xl shadow p-6">
           <p className="text-sm text-gray-500">Total Revenue</p>
-          <h2 className="text-4xl font-bold text-green-600 mt-3">
-            ₹{active.totalRevenue.toLocaleString()}
+          <h2 className="text-4xl font-bold text-blue-600 mt-3">
+            KES {active.totalRevenue.toLocaleString()}
           </h2>
         </div>
 
@@ -211,7 +211,7 @@ export default function SalesAnalytics() {
           <CartesianGrid strokeDasharray="3 3" stroke="#E5E7EB" />
           <XAxis dataKey="label" />
           <YAxis />
-          <Tooltip />
+          <Tooltip formatter={(value: number) => `KES ${value.toLocaleString()}`} />
           <Line
             type="monotone"
             dataKey="litres"
@@ -230,7 +230,7 @@ export default function SalesAnalytics() {
             <CartesianGrid strokeDasharray="3 3" />
             <XAxis dataKey="label" />
             <YAxis />
-            <Tooltip />
+            <Tooltip formatter={(value: number) => `KES ${value.toLocaleString()}`} />
             <Bar dataKey="revenue" fill="#16A34A" animationDuration={700} />
           </BarChart>
         </ChartCard>
@@ -240,8 +240,8 @@ export default function SalesAnalytics() {
             <CartesianGrid strokeDasharray="3 3" />
             <XAxis dataKey="device" />
             <YAxis />
-            <Tooltip />
-            <Bar dataKey="revenue" fill="#9333EA" animationDuration={700} />
+            <Tooltip formatter={(value: number) => `KES ${value.toLocaleString()}`} />
+            <Bar dataKey="revenue" fill="#16A34A" animationDuration={700} />
           </BarChart>
         </ChartCard>
       </div>
