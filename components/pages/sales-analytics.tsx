@@ -52,9 +52,9 @@ const DATA: Record<
       { label: "2L", revenue: 11200 },
     ],
     revenueByDevice: [
-      { device: "Machine A", revenue: 9800 },
-      { device: "Machine B", revenue: 8200 },
-      { device: "Machine C", revenue: 7200 },
+      { device: "MERU23", revenue: 9800 },
+      { device: "NYERI24", revenue: 8200 },
+      { device: "KAGOCHI35", revenue: 7200 },
     ],
   },
 
@@ -77,9 +77,9 @@ const DATA: Record<
       { label: "2L", revenue: 67400 },
     ],
     revenueByDevice: [
-      { device: "Machine A", revenue: 62000 },
-      { device: "Machine B", revenue: 54000 },
-      { device: "Machine C", revenue: 54400 },
+      { device: "MERU23", revenue: 62000 },
+      { device: "NYERI24", revenue: 54000 },
+      { device: "KAGOCHI35", revenue: 54400 },
     ],
   },
 
@@ -99,9 +99,9 @@ const DATA: Record<
       { label: "2L", revenue: 292000 },
     ],
     revenueByDevice: [
-      { device: "Machine A", revenue: 248000 },
-      { device: "Machine B", revenue: 230000 },
-      { device: "Machine C", revenue: 230000 },
+      { device: "MERU23", revenue: 248000 },
+      { device: "NYERI24", revenue: 230000 },
+      { device: "KAGOCHI35", revenue: 230000 },
     ],
   },
 
@@ -129,9 +129,9 @@ const DATA: Record<
       { label: "2L", revenue: 3420000 },
     ],
     revenueByDevice: [
-      { device: "Machine A", revenue: 2900000 },
-      { device: "Machine B", revenue: 2800000 },
-      { device: "Machine C", revenue: 2820000 },
+      { device: "MERU23", revenue: 2900000 },
+      { device: "NYERI24", revenue: 2800000 },
+      { device: "MERU35", revenue: 2820000 },
     ],
   },
 }
