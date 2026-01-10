@@ -1,4 +1,8 @@
 {
+  "pricing": {
+    "pricePerLitre": 60
+  },
+  
   "analytics": {
     "totalLitres": {
       "last24Hours": 836,
