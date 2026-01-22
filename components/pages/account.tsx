@@ -75,6 +75,15 @@ export default function AccountPage() {
     fetchVendor()
   }, [])
 
+  // Auto-refresh account to detect new withdrawals
+  useEffect(() => {
+    const interval = setInterval(() => {
+      fetchAccount()
+    }, 5000)
+
+    return () => clearInterval(interval)
+  }, [])
+
   // Handle vendor update
   const handleVendorUpdate = async () => {
     if (!vendor) return
@@ -121,7 +130,7 @@ export default function AccountPage() {
       const data = await res.json()
       if (!res.ok) throw new Error(data.error || "Withdrawal failed")
 
-      setAccount(data) // Update account state with new balance + withdrawal
+      setAccount(data)
       setIsWithdrawing(false)
       setWithdrawAmount("")
       setError("")
@@ -282,8 +291,61 @@ export default function AccountPage() {
           </div>
         )}
       </Card>
+
+      {/* Withdrawals History */}
+      <Card className="p-4 sm:p-6">
+        <h2 className="text-lg font-semibold text-gray-900 mb-4">Withdrawal History</h2>
+
+        {(!account?.withdrawals || account.withdrawals.length === 0) && (
+          <p className="text-sm text-gray-500">No withdrawal history available.</p>
+        )}
+
+        {account?.withdrawals && account.withdrawals.length > 0 && (
+          <>
+            <div className="hidden sm:block overflow-x-auto">
+              <table className="min-w-full border border-gray-200 rounded-lg">
+                <thead className="bg-gray-50">
+                  <tr>
+                    <th className="px-4 py-2 text-left text-sm font-medium text-gray-600">Withdrawal ID</th>
+                    <th className="px-4 py-2 text-left text-sm font-medium text-gray-600">Amount (KES)</th>
+                    <th className="px-4 py-2 text-left text-sm font-medium text-gray-600">Date</th>
+                    <th className="px-4 py-2 text-left text-sm font-medium text-gray-600">Time</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y">
+                  {account.withdrawals.map((w) => {
+                    const date = new Date(w.timestamp)
+                    return (
+                      <tr key={w.id} className="hover:bg-gray-50">
+                        <td className="px-4 py-2 text-sm font-mono">{w.id}</td>
+                        <td className="px-4 py-2 font-semibold">{w.amount.toLocaleString()}</td>
+                        <td className="px-4 py-2">{date.toLocaleDateString()}</td>
+                        <td className="px-4 py-2">{date.toLocaleTimeString()}</td>
+                      </tr>
+                    )
+                  })}
+                </tbody>
+              </table>
+            </div>
+
+            <div className="sm:hidden space-y-3">
+              {account.withdrawals.map((w) => {
+                const date = new Date(w.timestamp)
+                return (
+                  <div key={w.id} className="border border-gray-200 rounded-lg p-3">
+                    <p className="text-xs text-gray-500">Withdrawal ID</p>
+                    <p className="font-mono text-sm">{w.id}</p>
+                    <div className="flex justify-between mt-2">
+                      <p className="font-semibold">KES {w.amount.toLocaleString()}</p>
+                      <p className="text-sm">{date.toLocaleDateString()}</p>
+                    </div>
+                  </div>
+                )
+              })}
+            </div>
+          </>
+        )}
+      </Card>
     </div>
   )
 }
-
-
