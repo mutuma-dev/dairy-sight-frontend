@@ -20,10 +20,14 @@ export default function DeviceDetailModal({ device, onClose }: DeviceDetailModal
    * -------------------------
    * Prevents runtime crashes if backend returns
    * undefined/null values (old DB rows, partial data)
+   *
+   * NOTE:
+   * Backend is authoritative for temperature & capacity.
+   * No frontend defaults or hardcoded values.
    */
 
-  const temperatureValue = device.temperature ?? 4.0
-  const capacityValue = device.capacity ?? 100.0
+  const temperatureValue = device.temperature
+  const capacityValue = device.capacity
 
   // Calculate capacity percentage (assume max capacity = 100L)
   const capacityPercent = Math.min((capacityValue / 100) * 100, 100)
