@@ -41,7 +41,7 @@ export default function AlertsList({ alerts, onClose }: AlertsListProps) {
             <div className="space-y-2 md:space-y-3 p-4 md:p-6">
               {unresolvedAlerts.map((alert) => (
                 <div
-                  key={alert.id}
+                  key={alert.deviceName}
                   className="border-l-4 border-red-500 bg-red-50 rounded-lg p-3 md:p-4 hover:bg-red-100 transition"
                 >
                   {/* Alert Header */}
