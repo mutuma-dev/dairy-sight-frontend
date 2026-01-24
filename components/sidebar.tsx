@@ -75,8 +75,8 @@ export default function Sidebar({ currentPage, onPageChange, isOpen, onToggle, v
     { id: "tamper-detection", label: "Tamper Detection", icon: Lock },
     { id: "sales-analytics", label: "Sales Analytics", icon: BarChart3 },
     { id: "price", label: "Price", icon: DollarSign },
-    { id: "account", label: "Account", icon: Wallet },
-    { id: "cash", label: "CashPayments", icon: Banknote }
+    { id: "cash", label: "CashPayments", icon: Banknote },
+    { id: "account", label: "Account", icon: Wallet }
   ]
 
   return (
@@ -106,7 +106,7 @@ export default function Sidebar({ currentPage, onPageChange, isOpen, onToggle, v
         }`}
       >
         {/* Header */}
-        <div className="p-4 lg:p-6 border-b border-blue-500">
+        <div className=p-4 lg:p-6 border-b border-blue-500">
           <h1 className="text-lg lg:text-xl font-bold text-white">Dairy Sight</h1>
 
           {/* Vendor details */}
