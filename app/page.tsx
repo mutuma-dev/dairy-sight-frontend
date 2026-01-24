@@ -17,6 +17,7 @@ import TamperDetection from "@/components/pages/tamper-detection"
 import SalesAnalytics from "@/components/pages/sales-analytics"
 import Price from "@/components/pages/price"
 import AccountPage from "@/components/pages/account"
+import Cash from "@/components/pages/cash"
 
 export default function Home() {
   
@@ -127,6 +128,7 @@ useEffect(() => {
           {currentPage === "price" && (
             <Price pricing={appData.pricing} onUpdatePrice={handleUpdatePrice} />
           )}
+          {currentPage === "cash" && <Cash />}
           {currentPage === "account" && (
             <AccountPage
               account={appData.account}
