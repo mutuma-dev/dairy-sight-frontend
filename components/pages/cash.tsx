@@ -18,6 +18,7 @@ import { Card } from "@/components/ui/card"
 interface CashPayment {
   id: string
   amount: number
+  mac_address: string
   deviceName: string
   timestamp: string
 }
