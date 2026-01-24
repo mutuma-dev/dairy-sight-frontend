@@ -31,7 +31,7 @@ export default function DeviceCard({ device, onClick, variant = "default" }: Dev
           isTampered ? "bg-gradient-to-r from-red-600 to-red-500" : "bg-gradient-to-r from-blue-600 to-blue-500"
         } p-4 text-white`}
       >
-        <h3 className="text-lg font-bold">{device.id}</h3>
+        <h3 className="text-lg font-bold">{device.name}</h3>
         {isTampered && <p className="text-red-100 text-sm mt-1">Tampered Alert</p>}
       </div>
 
