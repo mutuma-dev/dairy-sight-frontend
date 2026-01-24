@@ -44,7 +44,7 @@ export default function DeviceStatusList({ devices, onClose }: DeviceStatusListP
           <div className="space-y-2 md:space-y-3 p-4 md:p-6">
             {devices.map((device) => (
               <div
-                key={device.id}
+                key={device.name}
                 className={`border-l-4 rounded-lg p-3 md:p-4 transition ${
                   device.status === "online"
                     ? "border-l-green-500 bg-green-50 hover:bg-green-100"
@@ -54,8 +54,8 @@ export default function DeviceStatusList({ devices, onClose }: DeviceStatusListP
                 {/* Device Header */}
                 <div className="flex items-start justify-between mb-3 flex-col sm:flex-row gap-2">
                   <div className="flex-1">
-                    <p className="font-bold text-sm md:text-base text-gray-800">{device.id}</p>
-                    <p className="text-xs md:text-sm text-gray-600">{device.name}</p>
+                    <p className="font-bold text-sm md:text-base text-gray-800">{device.name}</p>
+                    <p className="text-xs md:text-sm text-gray-600">{device.id}</p>
                   </div>
                   <div className="flex items-center gap-2 flex-shrink-0">
                     <span
