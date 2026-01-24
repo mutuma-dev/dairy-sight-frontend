@@ -47,8 +47,18 @@ export default function Cash() {
   }
 
   useEffect(() => {
+  // Initial fetch
+  fetchCashPayments()
+
+  // Refresh every 2 seconds
+  const interval = setInterval(() => {
     fetchCashPayments()
-  }, [])
+  }, 2000)
+
+  // Cleanup on unmount
+  return () => clearInterval(interval)
+}, [])
+
 
   return (
     <div className="p-4 sm:p-6 lg:p-8 max-w-5xl mx-auto space-y-6">
