@@ -18,7 +18,7 @@ import { Card } from "@/components/ui/card"
 interface CashPayment {
   id: string
   amount: number
-  mac_address: string
+  deviceName: string
   timestamp: string
 }
 
@@ -121,7 +121,7 @@ export default function Cash() {
                     Amount (KES)
                   </th>
                   <th className="px-4 py-2 text-left text-sm font-medium text-gray-600">
-                    MAC Address
+                    Device Name
                   </th>
                   <th className="px-4 py-2 text-left text-sm font-medium text-gray-600">
                     Date
@@ -143,7 +143,7 @@ export default function Cash() {
                         {payment.amount.toLocaleString()}
                       </td>
                       <td className="px-4 py-2 text-sm font-mono">
-                        {payment.mac_address}
+                        {payment.deviceName}
                       </td>
                       <td className="px-4 py-2">
                         {date.toLocaleDateString()}
@@ -182,10 +182,10 @@ export default function Cash() {
                   </div>
 
                   <p className="text-xs text-gray-500 mt-2">
-                    MAC Address
+                    Device Name
                   </p>
                   <p className="font-mono text-xs break-all">
-                    {payment.mac_address}
+                    {payment.deviceName}
                   </p>
 
                   <p className="text-xs text-gray-500 mt-1">
