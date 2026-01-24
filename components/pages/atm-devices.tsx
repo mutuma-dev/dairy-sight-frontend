@@ -150,7 +150,7 @@ export default function AtmDevices() {
               className="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow cursor-pointer overflow-hidden"
             >
               <div className="bg-gradient-to-r from-blue-600 to-blue-500 p-3 md:p-4 text-white">
-                <h3 className="text-base md:text-lg font-bold">{device.id}</h3>
+                <h3 className="text-base md:text-lg font-bold">{device.name}</h3>
               </div>
               <div className="p-4 md:p-6 space-y-3 md:space-y-4">
                 <div className="flex items-center justify-between">
