@@ -260,7 +260,7 @@ export default function Dashboard({ appData, vendorUpdatedTrigger }: DashboardPr
                 onClick={() => setShowDeviceStatus(true)}
               >
                 <div className="flex-1">
-                  <p className="font-medium text-sm md:text-base text-gray-800">{device.id}</p>
+                  <p className="font-medium text-sm md:text-base text-gray-800">{device.name}</p>
                 </div>
                 <div className="flex items-center gap-2 flex-shrink-0">
                   <span
