@@ -127,7 +127,7 @@ export default function TamperDetection() {
             >
               {/* Card Header */}
               <div className="bg-gradient-to-r from-red-600 to-red-500 p-3 md:p-4 text-white">
-                <h3 className="text-base md:text-lg font-bold">{device.id}</h3>
+                <h3 className="text-base md:text-lg font-bold">{device.name}</h3>
               </div>
 
               {/* Card Content */}
