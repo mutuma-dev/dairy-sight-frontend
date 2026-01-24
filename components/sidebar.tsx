@@ -12,7 +12,7 @@
 
 import { useState, useEffect } from "react"
 import type { Vendor } from "@/lib/types"
-import { BarChart3, Zap, Lock, LayoutDashboard, Menu, DollarSign, Wallet, RefreshCw } from "lucide-react"
+import { BarChart3, Zap, Lock, LayoutDashboard, Menu, DollarSign, Wallet, RefreshCw, Banknote } from "lucide-react"
 
 // Backend URL (replace with env variable later)
 const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL
@@ -76,6 +76,7 @@ export default function Sidebar({ currentPage, onPageChange, isOpen, onToggle, v
     { id: "sales-analytics", label: "Sales Analytics", icon: BarChart3 },
     { id: "price", label: "Price", icon: DollarSign },
     { id: "account", label: "Account", icon: Wallet },
+    { id: "cash", label: "CashPayments", icon: Banknote }
   ]
 
   return (
