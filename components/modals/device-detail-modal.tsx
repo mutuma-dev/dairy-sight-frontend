@@ -46,8 +46,8 @@ export default function DeviceDetailModal({ device, onClose }: DeviceDetailModal
         {/* Modal Header */}
         <div className="bg-gradient-to-r from-blue-600 to-blue-500 p-4 md:p-6 text-white flex justify-between items-start sticky top-0">
           <div className="min-w-0">
-            <h2 className="text-xl md:text-2xl font-bold">{device.id}</h2>
-            <p className="text-blue-100 mt-1 text-xs md:text-sm truncate">{device.name}</p>
+            <h2 className="text-xl md:text-2xl font-bold">{device.name}</h2>
+            <p className="text-blue-100 mt-1 text-xs md:text-sm truncate">{device.id}</p>
           </div>
           <button
             onClick={onClose}
