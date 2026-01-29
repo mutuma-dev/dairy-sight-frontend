@@ -2,18 +2,21 @@
  * Dashboard Page Component
  * ------------------------
  * Displays key metrics: Total Sales, Active Devices, Peak Hour, Alerts
- * Alerts now read directly from tampered devices (same source as TamperDetection)
- * No other changes made
+ * Fetches devices, recent transactions, and vendor details from backend
+ * Supports manual refresh for devices, transactions, and vendor details
+ * Vendor details automatically update if edited in Account component
+ * Fully responsive design for mobile and desktop
  */
 
 "use client"
 
-import { useState, useEffect, useMemo } from "react"
+import { useState, useEffect } from "react"
 import type { AppData, Device, Transaction, Vendor } from "@/lib/types"
 import StatsCard from "@/components/cards/stats-card"
 import TransactionsList from "@/components/modals/transactions-list"
 import AlertsList from "@/components/modals/alerts-list"
 import DeviceStatusList from "@/components/modals/device-status-list"
+import DeviceDetailModal from "@/components/modals/device-detail-modal"
 import { RefreshCw } from "lucide-react" // subtle refresh icon
 
 // Backend base URL (replace with env variable later)
@@ -29,6 +32,7 @@ export default function Dashboard({ appData, vendorUpdatedTrigger }: DashboardPr
   const [showTransactions, setShowTransactions] = useState(false)
   const [showAlerts, setShowAlerts] = useState(false)
   const [showDeviceStatus, setShowDeviceStatus] = useState(false)
+  const [selectedDevice, setSelectedDevice] = useState<Device | null>(null)
 
   // Vendor state
   const [vendor, setVendor] = useState<Vendor | null>(null)
@@ -111,8 +115,8 @@ export default function Dashboard({ appData, vendorUpdatedTrigger }: DashboardPr
   const onlineDevices = devices.filter((d) => d.status === "online").length
   const totalDevices = devices.length
 
-  // 🔴 Alerts now read from tampered devices, same source as TamperDetection page
-  const tamperedDevices = useMemo(() => devices.filter((d) => d.isTampered), [devices])
+  // Tampered devices for alerts
+  const tamperedDevices = devices.filter((d) => d.isTampered)
 
   return (
     <div className="min-h-screen p-3 md:p-6 space-y-4 md:space-y-6 lg:pt-6">
@@ -156,18 +160,16 @@ export default function Dashboard({ appData, vendorUpdatedTrigger }: DashboardPr
           change={`${appData.analytics.peakHours.last7Days.litres.toLocaleString()} litres sold`}
           backgroundColor="bg-white"
         />
-
-        {/* 🔴 ALERTS CARD (MODIFIED ONLY) */}
+        {/* Alerts Card - UPDATED */}
         <StatsCard
           title="Alerts"
-          value={tamperedDevices.length.toString()} // count of tampered devices
-          change="Requires attention"
+          value={loadingDevices ? "..." : tamperedDevices.length.toString()}
+          change="Devices flagged for tampering"
           backgroundColor="bg-white"
           onClick={() => {
-            if (tamperedDevices.length > 0) {
-              // open first tampered device in modal, same as TamperDetection
-              setSelectedDevice(tamperedDevices[0])
-            }
+            // Open a modal that shows the tampered devices exactly like TamperDetection page
+            if (tamperedDevices.length > 0) setSelectedDevice(tamperedDevices[0])
+            setShowAlerts(true)
           }}
           isClickable
         />
@@ -288,13 +290,13 @@ export default function Dashboard({ appData, vendorUpdatedTrigger }: DashboardPr
       {showTransactions && (
         <TransactionsList transactions={transactions} onClose={() => setShowTransactions(false)} />
       )}
-      {showAlerts && <AlertsList alerts={appData.alerts} onClose={() => setShowAlerts(false)} />}
-      {showDeviceStatus && <DeviceStatusList devices={devices} onClose={() => setShowDeviceStatus(false)} />}
-
-      {/* Tampered Device Modal for Alerts click */}
-      {selectedDevice && (
-        <DeviceDetailModal device={selectedDevice} onClose={() => setSelectedDevice(null)} />
+      {showAlerts && tamperedDevices.length > 0 && (
+        <DeviceDetailModal
+          device={selectedDevice!}
+          onClose={() => setShowAlerts(false)}
+        />
       )}
+      {showDeviceStatus && <DeviceStatusList devices={devices} onClose={() => setShowDeviceStatus(false)} />}
     </div>
   )
 }
