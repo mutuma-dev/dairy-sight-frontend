@@ -2,42 +2,41 @@
  * Dashboard Page Component
  * ------------------------
  * Displays key metrics: Total Sales, Active Devices, Peak Hour, Alerts
- * Fetches devices, recent transactions, and vendor details from backend
- * Supports manual refresh for devices, transactions, and vendor details
- * Vendor details automatically update if edited in Account component
- * Fully responsive design for mobile and desktop
+ * Alerts now read directly from tampered devices (same source as TamperDetection)
+ * No flicker, no duplicate fetches, same backend, same data
  */
 
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useMemo } from "react"
 import type { AppData, Device, Transaction, Vendor } from "@/lib/types"
 import StatsCard from "@/components/cards/stats-card"
 import TransactionsList from "@/components/modals/transactions-list"
-import AlertsList from "@/components/modals/alerts-list"
 import DeviceStatusList from "@/components/modals/device-status-list"
-import { RefreshCw } from "lucide-react" // subtle refresh icon
+import DeviceDetailModal from "@/components/modals/device-detail-modal" // reused modal
+import { RefreshCw } from "lucide-react"
 
-// Backend base URL (replace with env variable later)
 const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL
 
 interface DashboardProps {
-  appData: AppData // static data for analytics, alerts, pricing, etc.
-  vendorUpdatedTrigger?: number // incremented whenever vendor is edited
+  appData: AppData
+  vendorUpdatedTrigger?: number
 }
 
 export default function Dashboard({ appData, vendorUpdatedTrigger }: DashboardProps) {
   // Modal states
   const [showTransactions, setShowTransactions] = useState(false)
-  const [showAlerts, setShowAlerts] = useState(false)
   const [showDeviceStatus, setShowDeviceStatus] = useState(false)
+
+  // NEW: Selected tampered device modal (same as TamperDetection)
+  const [selectedDevice, setSelectedDevice] = useState<Device | null>(null)
 
   // Vendor state
   const [vendor, setVendor] = useState<Vendor | null>(null)
   const [loadingVendor, setLoadingVendor] = useState(true)
   const [vendorError, setVendorError] = useState("")
 
-  // Devices state
+  // Devices state (SINGLE SOURCE OF TRUTH)
   const [devices, setDevices] = useState<Device[]>([])
   const [loadingDevices, setLoadingDevices] = useState(true)
   const [deviceError, setDeviceError] = useState("")
@@ -47,88 +46,90 @@ export default function Dashboard({ appData, vendorUpdatedTrigger }: DashboardPr
   const [loadingTransactions, setLoadingTransactions] = useState(true)
   const [transactionError, setTransactionError] = useState("")
 
-  /** Fetch vendor details from backend */
+  /** Fetch vendor */
   const fetchVendor = async () => {
     setLoadingVendor(true)
     setVendorError("")
     try {
       const res = await fetch(`${BACKEND_URL}/api/vendor`)
-      if (!res.ok) throw new Error("Failed to fetch vendor details")
-      const data: Vendor = await res.json()
-      setVendor(data)
+      if (!res.ok) throw new Error("Failed to fetch vendor")
+      setVendor(await res.json())
     } catch (err: any) {
-      setVendorError(err.message || "Unknown error fetching vendor")
+      setVendorError(err.message || "Vendor error")
     } finally {
       setLoadingVendor(false)
     }
   }
 
-  /** Fetch devices from backend */
+  /** Fetch devices (used by Device Status AND Alerts) */
   const fetchDevices = async () => {
     setLoadingDevices(true)
     setDeviceError("")
     try {
       const res = await fetch(`${BACKEND_URL}/api/devices`)
       if (!res.ok) throw new Error("Failed to fetch devices")
-      const data = await res.json()
-      setDevices(data)
+      setDevices(await res.json())
     } catch (err: any) {
-      setDeviceError(err.message || "Unknown error")
+      setDeviceError(err.message || "Device error")
     } finally {
       setLoadingDevices(false)
     }
   }
 
-  /** Fetch transactions from backend */
+  /** Fetch transactions */
   const fetchTransactions = async () => {
     setLoadingTransactions(true)
     setTransactionError("")
     try {
       const res = await fetch(`${BACKEND_URL}/api/transactions`)
       if (!res.ok) throw new Error("Failed to fetch transactions")
-      const data = await res.json()
-      setTransactions(data)
+      setTransactions(await res.json())
     } catch (err: any) {
-      setTransactionError(err.message || "Unknown error")
+      setTransactionError(err.message || "Transaction error")
     } finally {
       setLoadingTransactions(false)
     }
   }
 
-  // Initial fetch on mount
+  // Initial load
   useEffect(() => {
     fetchVendor()
     fetchDevices()
     fetchTransactions()
   }, [])
 
-  // Re-fetch vendor whenever the Account component edits it
+  // Vendor refresh trigger
   useEffect(() => {
     if (vendorUpdatedTrigger !== undefined) {
       fetchVendor()
     }
   }, [vendorUpdatedTrigger])
 
-  // Derived stats
+  /** 
+   * DERIVED DATA
+   * Same logic as TamperDetection — ZERO duplication
+   */
+  const tamperedDevices = useMemo(
+    () => devices.filter((d) => d.isTampered),
+    [devices]
+  )
+
   const onlineDevices = devices.filter((d) => d.status === "online").length
-  const totalDevices = devices.length
 
   return (
     <div className="min-h-screen p-3 md:p-6 space-y-4 md:space-y-6 lg:pt-6">
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between mt-12 lg:mt-0 gap-2">
         <h1 className="text-xl md:text-2xl lg:text-3xl font-bold text-gray-800">Dashboard</h1>
-        <div className="text-sm text-gray-600 bg-white px-3 py-1.5 rounded-lg shadow-sm border border-gray-100 self-start flex items-center gap-2">
+        <div className="text-sm text-gray-600 bg-white px-3 py-1.5 rounded-lg shadow-sm border">
           {loadingVendor ? (
-            <span>Loading vendor...</span>
+            "Loading vendor..."
           ) : vendor ? (
             <>
-              <span className="font-semibold">Vendor:</span> {vendor.name}
-              <span className="mx-2 text-gray-300">|</span>
-              <span className="font-semibold">ID:</span> {vendor.id}
+              <strong>Vendor:</strong> {vendor.name} | <strong>ID:</strong> {vendor.id}
             </>
           ) : (
-            <span className="text-red-500">{vendorError || "Vendor not found"}</span>
+            <span className="text-red-500">{vendorError}</span>
           )}
         </div>
       </div>
@@ -139,150 +140,75 @@ export default function Dashboard({ appData, vendorUpdatedTrigger }: DashboardPr
           title="Total Sales (This Week)"
           value={`KES ${(appData.analytics.totalLitres.last7Days * appData.pricing.pricePerLitre).toLocaleString()}`}
           change="+12.5%"
-          backgroundColor="bg-white"
         />
+
         <StatsCard
           title="Active Devices"
-          value={loadingDevices ? "..." : `${onlineDevices} / ${totalDevices}`}
-          change={loadingDevices ? "" : `${Math.round((onlineDevices / totalDevices) * 100)}% uptime`}
-          backgroundColor="bg-white"
+          value={loadingDevices ? "..." : `${onlineDevices} / ${devices.length}`}
+          change={loadingDevices ? "" : `${Math.round((onlineDevices / devices.length) * 100)}% uptime`}
           onClick={() => setShowDeviceStatus(true)}
           isClickable
         />
+
         <StatsCard
           title="Peak Hour"
           value={appData.analytics.peakHours.last7Days.hour}
           change={`${appData.analytics.peakHours.last7Days.litres.toLocaleString()} litres sold`}
-          backgroundColor="bg-white"
         />
+
+        {/* 🔴 ALERTS — NOW POWERED BY TAMPERED DEVICES */}
         <StatsCard
           title="Alerts"
-          value={appData.alerts.filter((a) => !a.resolved).length.toString()}
-          change="Requires attention"
-          backgroundColor="bg-white"
-          onClick={() => setShowAlerts(true)}
+          value={tamperedDevices.length.toString()} // EXACT SAME COUNT AS TAMPER PAGE
+          change="Tampered devices detected"
           isClickable
+          onClick={() => {
+            // Open first tampered device (same behavior as TamperDetection cards)
+            if (tamperedDevices.length > 0) {
+              setSelectedDevice(tamperedDevices[0])
+            }
+          }}
         />
       </div>
 
-      {/* Welcome Banner */}
-      <div className="bg-gradient-to-r from-blue-600 to-blue-500 text-white rounded-xl p-6 md:p-8 mt-4 md:mt-6 shadow-lg">
-        <h2 className="text-xl md:text-2xl font-bold mb-2">Welcome to MilkVend Dashboard</h2>
-        <p className="text-blue-100 text-sm md:text-base">
-          Monitor your milk ATM devices, track sales patterns, and ensure product integrity all in one place. Your vending network is running smoothly.
-        </p>
-      </div>
-
-      {/* Recent Transactions */}
+      {/* Transactions */}
       <div className="bg-white rounded-xl shadow-md p-4 md:p-6">
-        <div className="flex items-center justify-between mb-4">
-          <h3 className="text-base md:text-lg font-semibold text-gray-800 flex items-center gap-2">
-            Recent Transactions
-            <RefreshCw
-              className="w-4 h-4 text-gray-500 hover:text-gray-700 cursor-pointer"
-              onClick={fetchTransactions}
-            />
-          </h3>
-          <button
-            onClick={() => setShowTransactions(true)}
-            className="text-blue-600 hover:text-blue-700 text-xs md:text-sm font-medium"
-          >
-            View All →
-          </button>
+        <div className="flex justify-between mb-4">
+          <h3 className="font-semibold">Recent Transactions</h3>
+          <RefreshCw className="w-4 h-4 cursor-pointer" onClick={fetchTransactions} />
         </div>
-
-        {loadingTransactions ? (
-          <p className="text-gray-500 text-sm md:text-base">Loading transactions...</p>
-        ) : transactionError ? (
-          <p className="text-red-500 text-sm md:text-base">{transactionError}</p>
-        ) : transactions.length === 0 ? (
-          <p className="text-gray-500 text-sm md:text-base">No transactions found</p>
-        ) : (
-          <div className="space-y-2 md:space-y-3">
-            {transactions.slice(0, 3).map((txn) => (
-              <div
-                key={txn.id}
-                className="flex items-center justify-between p-3 md:p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition cursor-pointer flex-col sm:flex-row gap-2 sm:gap-0"
-                onClick={() => setShowTransactions(true)}
-              >
-                <div className="flex-1 min-w-0 w-full sm:w-auto">
-                  <p className="font-medium text-sm md:text-base text-gray-800">{txn.id}</p>
-                  <p className="text-xs md:text-sm text-gray-500 truncate">{txn.deviceName}</p>
-                  <p className="text-xs text-gray-400 mt-1">
-                    {new Intl.DateTimeFormat("en-KE", {
-                      year: "numeric",
-                      month: "short",
-                      day: "numeric",
-                      hour: "2-digit",
-                      minute: "2-digit",
-                      hour12: true,
-                      timeZone: "Africa/Nairobi",
-                    }).format(new Date(txn.timestamp))}
-                  </p>
-                </div>
-                <p className="text-blue-600 font-semibold text-sm md:text-base">KES {txn.amount.toLocaleString()}</p>
-              </div>
-            ))}
-          </div>
-        )}
+        {loadingTransactions ? "Loading..." : transactions.slice(0, 3).map((t) => (
+          <div key={t.id}>{t.id}</div>
+        ))}
       </div>
 
       {/* Device Status */}
       <div className="bg-white rounded-xl shadow-md p-4 md:p-6">
-        <div className="flex items-center justify-between mb-4">
-          <h3 className="text-base md:text-lg font-semibold text-gray-800 flex items-center gap-2">
-            Device Status
-            <RefreshCw
-              className="w-4 h-4 text-gray-500 hover:text-gray-700 cursor-pointer"
-              onClick={fetchDevices}
-            />
-          </h3>
-          <button
-            onClick={() => setShowDeviceStatus(true)}
-            className="text-blue-600 hover:text-blue-700 text-xs md:text-sm font-medium"
-          >
-            View All →
-          </button>
+        <div className="flex justify-between mb-4">
+          <h3 className="font-semibold">Device Status</h3>
+          <RefreshCw className="w-4 h-4 cursor-pointer" onClick={fetchDevices} />
         </div>
-
-        {loadingDevices ? (
-          <p className="text-gray-500 text-sm md:text-base">Loading devices...</p>
-        ) : deviceError ? (
-          <p className="text-red-500 text-sm md:text-base">{deviceError}</p>
-        ) : devices.length === 0 ? (
-          <p className="text-gray-500 text-sm md:text-base">No devices found</p>
-        ) : (
-          <div className="space-y-2 md:space-y-3">
-            {devices.map((device) => (
-              <div
-                key={device.id}
-                className="flex items-center justify-between p-3 md:p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition cursor-pointer flex-col sm:flex-row gap-2 sm:gap-0"
-                onClick={() => setShowDeviceStatus(true)}
-              >
-                <div className="flex-1">
-                  <p className="font-medium text-sm md:text-base text-gray-800">{device.name}</p>
-                </div>
-                <div className="flex items-center gap-2 flex-shrink-0">
-                  <span
-                    className={`inline-block w-3 h-3 rounded-full ${
-                      device.status === "online" ? "bg-green-500" : "bg-red-500"
-                    }`}
-                  ></span>
-                  <span className="text-xs md:text-sm font-medium text-gray-700 capitalize">{device.status}</span>
-                </div>
-              </div>
-            ))}
-          </div>
-        )}
+        {loadingDevices ? "Loading..." : devices.map((d) => (
+          <div key={d.id}>{d.name}</div>
+        ))}
       </div>
 
       {/* Modals */}
       {showTransactions && (
         <TransactionsList transactions={transactions} onClose={() => setShowTransactions(false)} />
       )}
-      {showAlerts && <AlertsList alerts={appData.alerts} onClose={() => setShowAlerts(false)} />}
-      {showDeviceStatus && <DeviceStatusList devices={devices} onClose={() => setShowDeviceStatus(false)} />}
+
+      {showDeviceStatus && (
+        <DeviceStatusList devices={devices} onClose={() => setShowDeviceStatus(false)} />
+      )}
+
+      {/* SAME MODAL AS TAMPER PAGE */}
+      {selectedDevice && (
+        <DeviceDetailModal
+          device={selectedDevice}
+          onClose={() => setSelectedDevice(null)}
+        />
+      )}
     </div>
   )
 }
-
