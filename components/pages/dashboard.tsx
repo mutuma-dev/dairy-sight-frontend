@@ -27,23 +27,28 @@ interface DashboardProps {
 }
 
 export default function Dashboard({ appData, vendorUpdatedTrigger }: DashboardProps) {
+  // Modal states
   const [showTransactions, setShowTransactions] = useState(false)
   const [showAlerts, setShowAlerts] = useState(false)
   const [showDeviceStatus, setShowDeviceStatus] = useState(false)
   const [selectedDevice, setSelectedDevice] = useState<Device | null>(null)
 
+  // Vendor state
   const [vendor, setVendor] = useState<Vendor | null>(null)
   const [loadingVendor, setLoadingVendor] = useState(true)
   const [vendorError, setVendorError] = useState("")
 
+  // Devices state
   const [devices, setDevices] = useState<Device[]>([])
   const [loadingDevices, setLoadingDevices] = useState(true)
   const [deviceError, setDeviceError] = useState("")
 
+  // Transactions state
   const [transactions, setTransactions] = useState<Transaction[]>([])
   const [loadingTransactions, setLoadingTransactions] = useState(true)
   const [transactionError, setTransactionError] = useState("")
 
+  /** Fetch vendor details from backend */
   const fetchVendor = async () => {
     setLoadingVendor(true)
     setVendorError("")
@@ -59,14 +64,14 @@ export default function Dashboard({ appData, vendorUpdatedTrigger }: DashboardPr
     }
   }
 
+  /** Fetch devices from backend */
   const fetchDevices = async () => {
-    setLoadingDevices(true)
-    setDeviceError("")
     try {
       const res = await fetch(`${BACKEND_URL}/api/devices`)
       if (!res.ok) throw new Error("Failed to fetch devices")
       const data = await res.json()
       setDevices(data)
+      setDeviceError("")
     } catch (err: any) {
       setDeviceError(err.message || "Unknown error")
     } finally {
@@ -74,6 +79,7 @@ export default function Dashboard({ appData, vendorUpdatedTrigger }: DashboardPr
     }
   }
 
+  /** Fetch transactions from backend */
   const fetchTransactions = async () => {
     setLoadingTransactions(true)
     setTransactionError("")
@@ -89,25 +95,36 @@ export default function Dashboard({ appData, vendorUpdatedTrigger }: DashboardPr
     }
   }
 
+  // Initial fetch on mount
   useEffect(() => {
     fetchVendor()
     fetchDevices()
     fetchTransactions()
   }, [])
 
+  // 🔴 IMMEDIATE DEVICE CHANGE DETECTION (AUTO REFRESH)
+  useEffect(() => {
+    const interval = setInterval(fetchDevices, 5000)
+    return () => clearInterval(interval)
+  }, [])
+
+  // Re-fetch vendor whenever the Account component edits it
   useEffect(() => {
     if (vendorUpdatedTrigger !== undefined) {
       fetchVendor()
     }
   }, [vendorUpdatedTrigger])
 
+  // Derived stats
   const onlineDevices = devices.filter((d) => d.status === "online").length
   const totalDevices = devices.length
+
+  // Tampered devices for alerts
   const tamperedDevices = devices.filter((d) => d.isTampered)
 
   return (
     <div className="min-h-screen p-3 md:p-6 space-y-4 md:space-y-6 lg:pt-6">
-      {/* HEADER + STATS unchanged */}
+      {/* HEADER & STATS CARDS — UNCHANGED */}
 
       {/* Device Status */}
       <div className="bg-white rounded-xl shadow-md p-4 md:p-6">
@@ -138,9 +155,8 @@ export default function Dashboard({ appData, vendorUpdatedTrigger }: DashboardPr
             {devices.map((device) => {
               /**
                * -------------------------
-               * IMMEDIATE DATA DETECTION
+               * IMMEDIATE DATA NORMALIZATION
                * -------------------------
-               * No assumptions.
                * Backend is authoritative.
                */
               const capacityValue = device.capacity
@@ -156,12 +172,24 @@ export default function Dashboard({ appData, vendorUpdatedTrigger }: DashboardPr
               return (
                 <div
                   key={device.id}
-                  className="p-3 md:p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition cursor-pointer space-y-2"
+                  className="flex items-center justify-between p-3 md:p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition cursor-pointer"
                   onClick={() => setShowDeviceStatus(true)}
                 >
-                  <div className="flex items-center justify-between">
-                    <p className="font-medium text-sm md:text-base text-gray-800">{device.name}</p>
-                    <div className="flex items-center gap-2">
+                  <p className="font-medium text-sm md:text-base text-gray-800">
+                    {device.name}
+                  </p>
+
+                  <div className="flex items-center gap-3">
+                    {/* SMALL CAPACITY BAR */}
+                    <div className="w-16 h-1.5 bg-gray-200 rounded-full overflow-hidden">
+                      <div
+                        className={`h-full ${capacityBarColor} transition-all duration-300`}
+                        style={{ width: `${capacityPercent}%` }}
+                      ></div>
+                    </div>
+
+                    {/* STATUS */}
+                    <div className="flex items-center gap-1">
                       <span
                         className={`inline-block w-3 h-3 rounded-full ${
                           device.status === "online" ? "bg-green-500" : "bg-red-500"
@@ -172,20 +200,6 @@ export default function Dashboard({ appData, vendorUpdatedTrigger }: DashboardPr
                       </span>
                     </div>
                   </div>
-
-                  {/* CAPACITY — SAME LOGIC, SMALLER UI */}
-                  <div>
-                    <div className="flex justify-between text-xs text-gray-600 mb-1">
-                      <span>Capacity</span>
-                      <span>{capacityPercent.toFixed(0)}%</span>
-                    </div>
-                    <div className="w-full h-1.5 bg-gray-200 rounded-full overflow-hidden">
-                      <div
-                        className={`h-full ${capacityBarColor} transition-all duration-300`}
-                        style={{ width: `${capacityPercent}%` }}
-                      ></div>
-                    </div>
-                  </div>
                 </div>
               )
             })}
@@ -193,12 +207,15 @@ export default function Dashboard({ appData, vendorUpdatedTrigger }: DashboardPr
         )}
       </div>
 
-      {/* MODALS unchanged */}
+      {/* MODALS — UNCHANGED */}
       {showTransactions && (
         <TransactionsList transactions={transactions} onClose={() => setShowTransactions(false)} />
       )}
       {showAlerts && tamperedDevices.length > 0 && (
-        <DeviceDetailModal device={selectedDevice!} onClose={() => setShowAlerts(false)} />
+        <DeviceDetailModal
+          device={selectedDevice!}
+          onClose={() => setShowAlerts(false)}
+        />
       )}
       {showDeviceStatus && (
         <DeviceStatusList devices={devices} onClose={() => setShowDeviceStatus(false)} />
