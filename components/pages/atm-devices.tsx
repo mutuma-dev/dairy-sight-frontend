@@ -11,7 +11,7 @@
 
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef } from "react"
 import type { Device } from "@/lib/types"
 import DeviceDetailModal from "@/components/modals/device-detail-modal"
 
@@ -26,6 +26,9 @@ export default function AtmDevices() {
   const [notification, setNotification] = useState<{ type: "success" | "error"; message: string } | null>(null)
   const [loading, setLoading] = useState(false) // Loading state
 
+  // 🆕 Keep previous data reference for comparison
+  const previousDataRef = useRef<string>("")
+
   /**
    * Fetch devices from backend
    */
@@ -36,6 +39,7 @@ export default function AtmDevices() {
       if (!res.ok) throw new Error("Failed to fetch devices")
       const data: Device[] = await res.json()
       setDeviceList(data)
+      previousDataRef.current = JSON.stringify(data)
     } catch (error) {
       console.error("Error fetching devices:", error)
       showNotification("error", "Failed to load devices from backend.")
@@ -44,9 +48,38 @@ export default function AtmDevices() {
     }
   }
 
+  /**
+   * 🆕 Silent background refresh (NO loading, NO flicker)
+   * Only updates state if backend data actually changed
+   */
+  const fetchDevicesSilently = async () => {
+    try {
+      const res = await fetch(BACKEND_URL)
+      if (!res.ok) return
+
+      const data: Device[] = await res.json()
+      const serialized = JSON.stringify(data)
+
+      if (serialized !== previousDataRef.current) {
+        previousDataRef.current = serialized
+        setDeviceList(data)
+      }
+    } catch {
+      // Silent failure (no UI disturbance)
+    }
+  }
+
   // Fetch devices on mount
   useEffect(() => {
     fetchDevices()
+  }, [])
+
+  /**
+   * 🆕 Background polling for real-time updates
+   */
+  useEffect(() => {
+    const interval = setInterval(fetchDevicesSilently, 3000)
+    return () => clearInterval(interval)
   }, [])
 
   const handleChange = (field: string, value: string) => {
@@ -231,4 +264,3 @@ export default function AtmDevices() {
     </div>
   )
 }
-
