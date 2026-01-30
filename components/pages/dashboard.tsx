@@ -102,7 +102,7 @@ export default function Dashboard({ appData, vendorUpdatedTrigger }: DashboardPr
     fetchTransactions()
   }, [])
 
-  // ✅ IMMEDIATE DEVICE CHANGE DETECTION (AUTO POLLING)
+  // 🔴 IMMEDIATE DEVICE CHANGE DETECTION (AUTO REFRESH)
   useEffect(() => {
     const interval = setInterval(fetchDevices, 5000)
     return () => clearInterval(interval)
@@ -126,8 +126,10 @@ export default function Dashboard({ appData, vendorUpdatedTrigger }: DashboardPr
     <div className="min-h-screen p-3 md:p-6 space-y-4 md:space-y-6 lg:pt-6">
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between mt-12 lg:mt-0 gap-2">
-        <h1 className="text-xl md:text-2xl lg:text-3xl font-bold text-gray-800">Dashboard</h1>
-        <div className="text-sm text-gray-600 bg-white px-3 py-1.5 rounded-lg shadow-sm border border-gray-100 self-start flex items-center gap-2">
+        <h1 className="text-xl md:text-2xl lg:text-3xl font-bold text-gray-800">
+          Dashboard
+        </h1>
+        <div className="text-sm text-gray-600 bg-white px-3 py-1.5 rounded-lg shadow-sm border border-gray-100">
           {loadingVendor ? (
             <span>Loading vendor...</span>
           ) : vendor ? (
@@ -137,7 +139,7 @@ export default function Dashboard({ appData, vendorUpdatedTrigger }: DashboardPr
               <span className="font-semibold">ID:</span> {vendor.id}
             </>
           ) : (
-            <span className="text-red-500">{vendorError || "Vendor not found"}</span>
+            <span className="text-red-500">{vendorError}</span>
           )}
         </div>
       </div>
@@ -177,97 +179,107 @@ export default function Dashboard({ appData, vendorUpdatedTrigger }: DashboardPr
         />
       </div>
 
-      {/* Welcome Banner */}
-      <div className="bg-gradient-to-r from-blue-600 to-blue-500 text-white rounded-xl p-6 md:p-8 mt-4 md:mt-6 shadow-lg">
-        <h2 className="text-xl md:text-2xl font-bold mb-2">Welcome to MilkVend Dashboard</h2>
-        <p className="text-blue-100 text-sm md:text-base">
-          Monitor your milk ATM devices, track sales patterns, and ensure product integrity all in one place.
-        </p>
-      </div>
-
-      {/* Recent Transactions */}
+      {/* Device Status — EXACT DISPLAY PRESERVED */}
       <div className="bg-white rounded-xl shadow-md p-4 md:p-6">
         <div className="flex items-center justify-between mb-4">
           <h3 className="text-base md:text-lg font-semibold text-gray-800 flex items-center gap-2">
-            Recent Transactions
+            Device Status
             <RefreshCw
               className="w-4 h-4 text-gray-500 hover:text-gray-700 cursor-pointer"
-              onClick={fetchTransactions}
+              onClick={fetchDevices}
             />
           </h3>
           <button
-            onClick={() => setShowTransactions(true)}
+            onClick={() => setShowDeviceStatus(true)}
             className="text-blue-600 hover:text-blue-700 text-xs md:text-sm font-medium"
           >
             View All →
           </button>
         </div>
 
-        {loadingTransactions ? (
-          <p className="text-gray-500">Loading transactions...</p>
+        {loadingDevices ? (
+          <p className="text-gray-500 text-sm md:text-base">Loading devices...</p>
+        ) : deviceError ? (
+          <p className="text-red-500 text-sm md:text-base">{deviceError}</p>
+        ) : devices.length === 0 ? (
+          <p className="text-gray-500 text-sm md:text-base">No devices found</p>
         ) : (
-          <div className="space-y-2">
-            {transactions.slice(0, 3).map((txn) => (
-              <div
-                key={txn.id}
-                className="flex justify-between p-3 bg-gray-50 rounded-lg"
-                onClick={() => setShowTransactions(true)}
-              >
-                <div>
-                  <p className="font-medium">{txn.id}</p>
-                  <p className="text-xs text-gray-500">{txn.deviceName}</p>
+          <div className="space-y-2 md:space-y-3">
+            {devices.map((device) => {
+              /**
+               * -------------------------
+               * IMMEDIATE DATA NORMALIZATION
+               * -------------------------
+               * Backend is authoritative.
+               */
+              const capacityValue = device.capacity
+              const capacityPercent = Math.min((capacityValue / 100) * 100, 100)
+
+              const capacityBarColor =
+                capacityPercent >= 50
+                  ? "bg-green-500"
+                  : capacityPercent >= 25
+                  ? "bg-yellow-400"
+                  : "bg-red-500"
+
+              return (
+                <div
+                  key={device.id}
+                  className="flex items-center justify-between p-3 md:p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition cursor-pointer"
+                  onClick={() => setShowDeviceStatus(true)}
+                >
+                  <p className="font-medium text-sm md:text-base text-gray-800">
+                    {device.name}
+                  </p>
+
+                  <div className="flex items-center gap-3">
+                    {/* SMALL CAPACITY BAR */}
+                    <div className="w-16 h-1.5 bg-gray-200 rounded-full overflow-hidden">
+                      <div
+                        className={`h-full ${capacityBarColor} transition-all duration-300`}
+                        style={{ width: `${capacityPercent}%` }}
+                      ></div>
+                    </div>
+
+                    {/* STATUS */}
+                    <div className="flex items-center gap-1">
+                      <span
+                        className={`inline-block w-3 h-3 rounded-full ${
+                          device.status === "online"
+                            ? "bg-green-500"
+                            : "bg-red-500"
+                        }`}
+                      ></span>
+                      <span className="text-xs md:text-sm font-medium text-gray-700 capitalize">
+                        {device.status}
+                      </span>
+                    </div>
+                  </div>
                 </div>
-                <p className="text-blue-600 font-semibold">
-                  KES {txn.amount.toLocaleString()}
-                </p>
-              </div>
-            ))}
+              )
+            })}
           </div>
         )}
       </div>
 
-      {/* Device Status CARD — UPDATED */}
-      <div className="bg-white rounded-xl shadow-md p-4 md:p-6">
-        <div className="space-y-2">
-          {devices.map((device) => {
-            const capacityPercent = Math.min((device.capacity / 100) * 100, 100)
-            const barColor =
-              capacityPercent >= 50
-                ? "bg-green-500"
-                : capacityPercent >= 25
-                ? "bg-yellow-400"
-                : "bg-red-500"
-
-            return (
-              <div key={device.id} className="flex justify-between items-center bg-gray-50 p-3 rounded-lg">
-                <p className="font-medium">{device.name}</p>
-
-                <div className="flex items-center gap-3">
-                  <div className="w-14 h-1.5 bg-gray-200 rounded-full overflow-hidden">
-                    <div className={`h-full ${barColor}`} style={{ width: `${capacityPercent}%` }} />
-                  </div>
-
-                  <span
-                    className={`w-3 h-3 rounded-full ${
-                      device.status === "online" ? "bg-green-500" : "bg-red-500"
-                    }`}
-                  ></span>
-                </div>
-              </div>
-            )
-          })}
-        </div>
-      </div>
-
       {/* Modals */}
       {showTransactions && (
-        <TransactionsList transactions={transactions} onClose={() => setShowTransactions(false)} />
+        <TransactionsList
+          transactions={transactions}
+          onClose={() => setShowTransactions(false)}
+        />
       )}
       {showAlerts && selectedDevice && (
-        <DeviceDetailModal device={selectedDevice} onClose={() => setShowAlerts(false)} />
+        <DeviceDetailModal
+          device={selectedDevice}
+          onClose={() => setShowAlerts(false)}
+        />
       )}
       {showDeviceStatus && (
-        <DeviceStatusList devices={devices} onClose={() => setShowDeviceStatus(false)} />
+        <DeviceStatusList
+          devices={devices}
+          onClose={() => setShowDeviceStatus(false)}
+        />
       )}
     </div>
   )
