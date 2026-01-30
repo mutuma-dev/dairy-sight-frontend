@@ -296,7 +296,7 @@ export default function Dashboard({ appData, vendorUpdatedTrigger }: DashboardPr
 
                     {/* Capacity percentage and litres */}
                     <span className="text-xs text-gray-600 font-medium">
-                      {capacityPercent.toFixed(0)}% ({capacityValue.toFixed(1)}L)
+                      {capacityPercent.toFixed(0)}% 
                     </span>
 
                     {/* Device status */}
