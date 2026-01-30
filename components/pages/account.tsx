@@ -5,11 +5,12 @@
  * - Allows editing vendor name & shopName (ID immutable)
  * - Saves updated vendor info to backend
  * - Shows success/error feedback
- * - Handles account balance and withdrawals **/
+ * - Handles account balance and withdrawals
+ */
 
 "use client"
 
-import { useState, useEffect, useRef } from "react"
+import { useState, useEffect } from "react"
 import { Wallet, ArrowDownToLine, Edit, Check, X } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
@@ -36,9 +37,6 @@ export default function AccountPage() {
   // Base URL (replace with env later)
   const API_BASE = process.env.NEXT_PUBLIC_BACKEND_URL + "/api"
 
-  // Ref to keep previous withdrawals for comparison
-  const prevWithdrawalsRef = useRef<Account["withdrawals"]>([])
-
   // Fetch account data
   const fetchAccount = async () => {
     try {
@@ -46,22 +44,7 @@ export default function AccountPage() {
       const res = await fetch(`${API_BASE}/account`)
       if (!res.ok) throw new Error("Failed to fetch account data")
       const data: Account = await res.json()
-
-      // Detect new withdrawals without overwriting existing ones
-      if (prevWithdrawalsRef.current.length > 0 && data.withdrawals.length > prevWithdrawalsRef.current.length) {
-        const existingIds = new Set(prevWithdrawalsRef.current.map((w) => w.id))
-        const newWithdrawals = data.withdrawals.filter((w) => !existingIds.has(w.id))
-        if (newWithdrawals.length > 0 && account) {
-          // Append new withdrawals to current state immediately
-          setAccount({ ...data, withdrawals: [...account.withdrawals, ...newWithdrawals] })
-        } else {
-          setAccount(data)
-        }
-      } else {
-        setAccount(data)
-      }
-
-      prevWithdrawalsRef.current = data.withdrawals
+      setAccount(data)
     } catch (err: any) {
       console.error(err)
     } finally {
@@ -92,13 +75,14 @@ export default function AccountPage() {
     fetchVendor()
   }, [])
 
-  // Auto-refresh account to detect new withdrawals without flicker
+  // Auto-refresh account to detect new withdrawals
   useEffect(() => {
     const interval = setInterval(() => {
       fetchAccount()
     }, 5000)
+
     return () => clearInterval(interval)
-  }, [account])
+  }, [])
 
   // Handle vendor update
   const handleVendorUpdate = async () => {
@@ -146,16 +130,7 @@ export default function AccountPage() {
       const data = await res.json()
       if (!res.ok) throw new Error(data.error || "Withdrawal failed")
 
-      // Immediately append the new withdrawal to account state
-      if (account) {
-        const newWithdrawal = data.withdrawals[data.withdrawals.length - 1]
-        setAccount({ ...account, withdrawals: [...account.withdrawals, newWithdrawal], balance: data.balance })
-        prevWithdrawalsRef.current = [...account.withdrawals, newWithdrawal]
-      } else {
-        setAccount(data)
-        prevWithdrawalsRef.current = data.withdrawals
-      }
-
+      setAccount(data)
       setIsWithdrawing(false)
       setWithdrawAmount("")
       setError("")
@@ -374,4 +349,3 @@ export default function AccountPage() {
     </div>
   )
 }
-
