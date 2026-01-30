@@ -241,7 +241,7 @@ export default function Dashboard({ appData, vendorUpdatedTrigger }: DashboardPr
         )}
       </div>
 
-      {/* Devices Card (UPDATED) */}
+      {/* Devices Card (UPDATED WITH CAPACITY PERCENTAGE & LITRES) */}
       <div className="bg-white rounded-xl shadow-md p-4 md:p-6">
         <div className="flex items-center justify-between mb-4">
           <h3 className="text-base md:text-lg font-semibold text-gray-800 flex items-center gap-2">
@@ -285,7 +285,7 @@ export default function Dashboard({ appData, vendorUpdatedTrigger }: DashboardPr
                 >
                   <p className="font-medium text-sm md:text-base text-gray-800">{device.name}</p>
 
-                  <div className="flex items-center gap-3">
+                  <div className="flex items-center gap-2">
                     {/* Small horizontal capacity bar */}
                     <div className="w-16 h-1.5 bg-gray-200 rounded-full overflow-hidden">
                       <div
@@ -294,8 +294,13 @@ export default function Dashboard({ appData, vendorUpdatedTrigger }: DashboardPr
                       ></div>
                     </div>
 
+                    {/* Capacity percentage and litres */}
+                    <span className="text-xs text-gray-600 font-medium">
+                      {capacityPercent.toFixed(0)}% ({capacityValue.toFixed(1)}L)
+                    </span>
+
                     {/* Device status */}
-                    <div className="flex items-center gap-1">
+                    <div className="flex items-center gap-1 ml-2">
                       <span
                         className={`inline-block w-3 h-3 rounded-full ${
                           device.status === "online" ? "bg-green-500" : "bg-red-500"
