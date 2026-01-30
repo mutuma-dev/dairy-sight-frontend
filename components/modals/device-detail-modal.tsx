@@ -6,12 +6,16 @@
  * Shows all device properties including temperature and capacity
  */
 
+import { useEffect, useRef, useState } from "react"
 import type { Device } from "@/lib/types"
 
 interface DeviceDetailModalProps {
   device: Device
   onClose: () => void
 }
+
+// Backend base URL
+const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL + "/api/devices"
 
 export default function DeviceDetailModal({ device, onClose }: DeviceDetailModalProps) {
   /**
@@ -26,8 +30,46 @@ export default function DeviceDetailModal({ device, onClose }: DeviceDetailModal
    * No frontend defaults or hardcoded values.
    */
 
-  const temperatureValue = device.temperature
-  const capacityValue = device.capacity
+  // 🆕 Local live device state
+  const [liveDevice, setLiveDevice] = useState<Device>(device)
+
+  // 🆕 Keep previous payload reference to avoid unnecessary re-renders
+  const previousDataRef = useRef<string>("")
+
+  /**
+   * 🆕 Silent background refresh for this device only
+   * Updates UI instantly if backend values change
+   */
+  const fetchDeviceSilently = async () => {
+    try {
+      const res = await fetch(`${BACKEND_URL}/${device.id}`)
+      if (!res.ok) return
+
+      const data: Device = await res.json()
+      const serialized = JSON.stringify(data)
+
+      if (serialized !== previousDataRef.current) {
+        previousDataRef.current = serialized
+        setLiveDevice(data)
+      }
+    } catch {
+      // Silent failure (no UI disturbance)
+    }
+  }
+
+  /**
+   * 🆕 Start background polling while modal is open
+   */
+  useEffect(() => {
+    previousDataRef.current = JSON.stringify(device)
+    setLiveDevice(device)
+
+    const interval = setInterval(fetchDeviceSilently, 3000)
+    return () => clearInterval(interval)
+  }, [device])
+
+  const temperatureValue = liveDevice.temperature
+  const capacityValue = liveDevice.capacity
 
   // Calculate capacity percentage (assume max capacity = 100L)
   const capacityPercent = Math.min((capacityValue / 100) * 100, 100)
@@ -46,8 +88,8 @@ export default function DeviceDetailModal({ device, onClose }: DeviceDetailModal
         {/* Modal Header */}
         <div className="bg-gradient-to-r from-blue-600 to-blue-500 p-4 md:p-6 text-white flex justify-between items-start sticky top-0">
           <div className="min-w-0">
-            <h2 className="text-xl md:text-2xl font-bold">{device.name}</h2>
-            <p className="text-blue-100 mt-1 text-xs md:text-sm truncate">{device.id}</p>
+            <h2 className="text-xl md:text-2xl font-bold">{liveDevice.name}</h2>
+            <p className="text-blue-100 mt-1 text-xs md:text-sm truncate">{liveDevice.id}</p>
           </div>
           <button
             onClick={onClose}
@@ -66,11 +108,11 @@ export default function DeviceDetailModal({ device, onClose }: DeviceDetailModal
             <div className="flex items-center gap-3">
               <span
                 className={`inline-block w-4 h-4 rounded-full ${
-                  device.status === "online" ? "bg-green-500" : "bg-red-500"
+                  liveDevice.status === "online" ? "bg-green-500" : "bg-red-500"
                 }`}
               ></span>
               <span className="text-base md:text-lg font-semibold text-gray-800 capitalize">
-                {device.status}
+                {liveDevice.status}
               </span>
             </div>
           </div>
@@ -116,7 +158,7 @@ export default function DeviceDetailModal({ device, onClose }: DeviceDetailModal
                 minute: "2-digit",
                 hour12: true,
                 timeZone: "Africa/Nairobi",
-              }).format(new Date(device.lastUpdated))}
+              }).format(new Date(liveDevice.lastUpdated))}
             </p>
           </div>
         </div>
